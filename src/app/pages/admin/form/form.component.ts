@@ -141,9 +141,12 @@ export class FormComponent implements OnInit {
   form_Id = '';
   constructor(
     @Inject(Router) private router: Router,
+    @Inject(AlertService) private alertService: AlertService,
     @Inject(AngularFirestore) private firestore: AngularFirestore,
     @Inject(ActivatedRoute) private activatedRoute: ActivatedRoute,
   ) {
+    this.alertService.showLoader('Loading....');
+
     setTimeout(() => {
       $('[data-toggle="tooltip"]').tooltip();
 
@@ -432,7 +435,7 @@ export class FormComponent implements OnInit {
     this.activatedRoute.queryParams
       .subscribe((e: Params) => {
         // tslint:disable-next-line: radix
-     
+
         console.log(e);
 
         this.form_Id = e.formId;
@@ -455,6 +458,8 @@ export class FormComponent implements OnInit {
       this.formCurrentPage = this.model.attributes[this.currentPageIndex];
       //   console.log(this.model);
       console.log(doc.data());
+      this.alertService.closeLoader();
+
     });
   }
 
@@ -536,18 +541,18 @@ export class FormComponent implements OnInit {
     this.showProperties = true;
     this.selectedItem = item;
 
-    setTimeout(() => {
+    // setTimeout(() => {
 
-      // if (!this.isValidObject(this.selectedItem.validOption)) {
-      //   this.selectedItem.validOption = {};
-      // } else {
-      //   this.selectedItem.validOption = item.validOption;
+    // if (!this.isValidObject(this.selectedItem.validOption)) {
+    //   this.selectedItem.validOption = {};
+    // } else {
+    //   this.selectedItem.validOption = item.validOption;
 
-      // }
-      console.log(this.selectedItem.validOption);
+    // }
+    console.log(this.selectedItem);
 
-    }, 1000);
-    console.log(JSON.parse(JSON.stringify(item)));
+    // }, 1000);
+    // console.log(JSON.parse(JSON.stringify(item)));
 
     this.checkConditionalQuest();
     this.currentFieldIndex = i;
@@ -568,7 +573,6 @@ export class FormComponent implements OnInit {
       if ((element.fielType === 'yesNo') || (element.fielType === 'trueFalse') || (element.fielType === 'picture') || (element.fielType === 'multiple') || (element.fielType === 'dropdown')) {
         this.conditionalQuesList.push(element);
       }
-      console.log(this.conditionalQuesList);
 
 
     });

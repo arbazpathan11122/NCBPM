@@ -53,15 +53,18 @@
                 <a class="nav-link " id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false"><img class="profile-img mr-2" src="assets/img/user.jpg" alt="Avatar">
                     <div class="right-menu float-right">
-                        <span>Abhinav</span>
+                        <span style="font-size: 18px">{{user.name}}</span>
                         <br>
-                        <span style="font-size: 14px">Super-admin</span>
+                        <span style="font-size: 10px">{{user.role}}</span>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item">{{user.email}}</a>
+                            <a class="dropdown-item">{{user.phone}}</a>
+                            <!-- <a class="dropdown-item">{{user.email}}</a> -->
+
+                            <a class="dropdown-item" (click)="SignOut()">Log out</a>
+                        </div>
                     </div>
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item">Profile</a>
-                    <a class="dropdown-item" routerLink="/login">Log out</a>
-                </div>
             </li>
         </ul>
     </div>

@@ -74,15 +74,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 /* harmony import */ var src_app_service_alert_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/service/alert.service */ "./src/app/service/alert.service.ts");
 /* harmony import */ var _angular_fire_firestore__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/fire/firestore */ "./node_modules/@angular/fire/firestore/es2015/index.js");
+/* harmony import */ var src_app_service_Auth_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/service/Auth.service */ "./src/app/service/Auth.service.ts");
+
 
 
 
 
 
 let ProcessComponent = class ProcessComponent {
-    constructor(router, alertService, firestore) {
+    constructor(router, alertService, authService, firestore) {
         this.router = router;
         this.alertService = alertService;
+        this.authService = authService;
         this.firestore = firestore;
         this.modelFields = [];
         this.model = {
@@ -110,9 +113,30 @@ let ProcessComponent = class ProcessComponent {
             ]
         };
         this.formStorge = [];
+        this.checkValidUser();
     }
     ngOnInit() {
-        this.getFormFromFirebase();
+    }
+    checkValidUser() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user !== null) {
+            // if (user.emailVerified !== true) {
+            //   this.alertService.showErrorAlertWithTwoBtn('Please Verify your Email. The verification mail sent to your email id '
+            //     + user.email, 'Resend Link').then((res) => {
+            //       console.log(res);
+            //       if (res.value) {
+            //         this.authService.SendVerificationMail();
+            //       }
+            //       this.router.navigate(['/login']);
+            //     });
+            // } else {
+            //   this.alertService.showLoader('Loading....');
+            // }
+            this.getFormFromFirebase();
+        }
+        else {
+            this.router.navigate(['/login']);
+        }
     }
     getFormFromFirebase() {
         this.firestore.collection('formList').get().subscribe(doc => {
@@ -121,6 +145,7 @@ let ProcessComponent = class ProcessComponent {
                 const form = elem.data();
                 form.id = id;
                 this.formStorge.push(form);
+                this.alertService.closeLoader();
             });
         });
     }
@@ -135,6 +160,7 @@ let ProcessComponent = class ProcessComponent {
         });
     }
     editProcess(i) {
+        this.alertService.showLoader('Loading....');
         this.router.navigate(['/home/form'], { queryParams: { formId: i } });
     }
     deleteProcess(id, index) {
@@ -154,7 +180,8 @@ ProcessComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     }),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"])),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(src_app_service_alert_service__WEBPACK_IMPORTED_MODULE_3__["AlertService"])),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_fire_firestore__WEBPACK_IMPORTED_MODULE_4__["AngularFirestore"]))
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(src_app_service_Auth_service__WEBPACK_IMPORTED_MODULE_5__["AuthService"])),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](3, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_fire_firestore__WEBPACK_IMPORTED_MODULE_4__["AngularFirestore"]))
 ], ProcessComponent);
 
 

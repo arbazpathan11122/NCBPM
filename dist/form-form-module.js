@@ -565,10 +565,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
-/* harmony import */ var src_app_class_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/class/data */ "./src/app/class/data.ts");
-/* harmony import */ var _angular_fire_firestore__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/fire/firestore */ "./node_modules/@angular/fire/firestore/es2015/index.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var src_app_service_alert_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/service/alert.service */ "./src/app/service/alert.service.ts");
+/* harmony import */ var src_app_class_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/class/data */ "./src/app/class/data.ts");
+/* harmony import */ var _angular_fire_firestore__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/fire/firestore */ "./node_modules/@angular/fire/firestore/es2015/index.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_6__);
+
 
 
 
@@ -576,11 +578,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let FormComponent = class FormComponent {
-    constructor(router, firestore, activatedRoute) {
+    constructor(router, alertService, firestore, activatedRoute) {
         this.router = router;
+        this.alertService = alertService;
         this.firestore = firestore;
         this.activatedRoute = activatedRoute;
-        this.iconField = src_app_class_data__WEBPACK_IMPORTED_MODULE_3__["icons_and_fields"];
+        this.iconField = src_app_class_data__WEBPACK_IMPORTED_MODULE_4__["icons_and_fields"];
         this.value = {
             label: '',
             value: false
@@ -678,6 +681,7 @@ let FormComponent = class FormComponent {
         ];
         this.formStorge = [];
         this.form_Id = '';
+        this.alertService.showLoader('Loading....');
         setTimeout(() => {
             $('[data-toggle="tooltip"]').tooltip();
         }, 0);
@@ -922,6 +926,7 @@ let FormComponent = class FormComponent {
             this.formCurrentPage = this.model.attributes[this.currentPageIndex];
             //   console.log(this.model);
             console.log(doc.data());
+            this.alertService.closeLoader();
         });
     }
     allowDrop(event) {
@@ -1059,7 +1064,7 @@ let FormComponent = class FormComponent {
         console.log(item.ratingArray);
     }
     removeField(i) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_5___default()({
+        sweetalert2__WEBPACK_IMPORTED_MODULE_6___default()({
             title: 'Are you sure?',
             text: 'Do you want to remove this field?',
             type: 'warning',
@@ -1076,7 +1081,7 @@ let FormComponent = class FormComponent {
         });
     }
     removePage(i, mesg) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_5___default()({
+        sweetalert2__WEBPACK_IMPORTED_MODULE_6___default()({
             title: 'Are you sure?',
             text: 'Do you want to remove ' + mesg + ' Page?',
             type: 'warning',
@@ -1249,21 +1254,21 @@ let FormComponent = class FormComponent {
         validationArray.reverse().forEach(field => {
             console.log(field.label + '=>' + field.required + '=>' + field.value);
             if (field.required && !field.value && field.type != 'checkbox') {
-                sweetalert2__WEBPACK_IMPORTED_MODULE_5___default()('Error', 'Please enter ' + field.label, 'error');
+                sweetalert2__WEBPACK_IMPORTED_MODULE_6___default()('Error', 'Please enter ' + field.label, 'error');
                 valid = false;
                 return false;
             }
             if (field.required && field.regex) {
                 let regex = new RegExp(field.regex);
                 if (regex.test(field.value) == false) {
-                    sweetalert2__WEBPACK_IMPORTED_MODULE_5___default()('Error', field.errorText, 'error');
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_6___default()('Error', field.errorText, 'error');
                     valid = false;
                     return false;
                 }
             }
             if (field.required && field.type == 'checkbox') {
                 if (field.values.filter(r => r.selected).length == 0) {
-                    sweetalert2__WEBPACK_IMPORTED_MODULE_5___default()('Error', 'Please enterrr ' + field.label, 'error');
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_6___default()('Error', 'Please enterrr ' + field.label, 'error');
                     valid = false;
                     return false;
                 }
@@ -1292,8 +1297,9 @@ FormComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         styles: [__webpack_require__(/*! ./form.component.scss */ "./src/app/pages/admin/form/form.component.scss")]
     }),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"])),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_fire_firestore__WEBPACK_IMPORTED_MODULE_4__["AngularFirestore"])),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"]))
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(src_app_service_alert_service__WEBPACK_IMPORTED_MODULE_3__["AlertService"])),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_fire_firestore__WEBPACK_IMPORTED_MODULE_5__["AngularFirestore"])),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](3, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"]))
 ], FormComponent);
 
 

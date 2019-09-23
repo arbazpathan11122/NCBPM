@@ -69,6 +69,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pages_login_login_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/login/login.component */ "./src/app/pages/login/login.component.ts");
 /* harmony import */ var _pages_404_error_page_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/404/error-page.component */ "./src/app/pages/404/error-page.component.ts");
 /* harmony import */ var _pages_signup_signup_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/signup/signup.component */ "./src/app/pages/signup/signup.component.ts");
+/* harmony import */ var _service_auth_guard__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./service/auth.guard */ "./src/app/service/auth.guard.ts");
+
 
 
 
@@ -79,7 +81,9 @@ const routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: _pages_login_login_component__WEBPACK_IMPORTED_MODULE_3__["LoginComponent"], },
     { path: 'signUp', component: _pages_signup_signup_component__WEBPACK_IMPORTED_MODULE_5__["SignupComponent"], },
-    { path: 'home', loadChildren: './pages/admin/admin.module#AdminModule' },
+    {
+        path: 'home', loadChildren: './pages/admin/admin.module#AdminModule', canActivate: ['HomeAuthGuard']
+    },
     { path: 'formView', loadChildren: './pages/admin/formview/formview.module#FormViewModule' },
     { path: '**', redirectTo: '/page404' },
     { path: 'page404', component: _pages_404_error_page_component__WEBPACK_IMPORTED_MODULE_4__["ErrorPageComponent"] }
@@ -89,7 +93,8 @@ let AppRoutingModule = class AppRoutingModule {
 AppRoutingModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forRoot(routes)],
-        exports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"]]
+        exports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"]],
+        providers: [_service_auth_guard__WEBPACK_IMPORTED_MODULE_6__["HomeAuthGuard"]]
     })
 ], AppRoutingModule);
 
@@ -173,9 +178,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _service_alert_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./service/alert.service */ "./src/app/service/alert.service.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 /* harmony import */ var _angular_fire__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/fire */ "./node_modules/@angular/fire/es2015/index.js");
-/* harmony import */ var _angular_fire_firestore__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/fire/firestore */ "./node_modules/@angular/fire/firestore/es2015/index.js");
-/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! src/environments/environment */ "./src/environments/environment.ts");
-/* harmony import */ var ngx_drag_drop__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ngx-drag-drop */ "./node_modules/ngx-drag-drop/ngx-drag-drop.js");
+/* harmony import */ var _angular_fire_auth__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/fire/auth */ "./node_modules/@angular/fire/auth/es2015/index.js");
+/* harmony import */ var _angular_fire_firestore__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/fire/firestore */ "./node_modules/@angular/fire/firestore/es2015/index.js");
+/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! src/environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var ngx_drag_drop__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ngx-drag-drop */ "./node_modules/ngx-drag-drop/ngx-drag-drop.js");
+/* harmony import */ var _service_Auth_service__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./service/Auth.service */ "./src/app/service/Auth.service.ts");
+/* harmony import */ var firebaseui_angular__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! firebaseui-angular */ "./node_modules/firebaseui-angular/fesm2015/firebaseui-angular.js");
 
 
 
@@ -192,6 +200,46 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+// import {  HomeAuthGuard } from './service/auth.guard';
+// import { FirebaseUIModule } from 'firebaseui-angular';
+// import * as firebase from 'firebase/app';
+// import * as firebaseui from 'firebaseui';
+// // currently there is a bug while building the app with --prod
+// // - https://github.com/RaphaelJenni/FirebaseUI-Angular/issues/76
+// // the plugin exposes the two libraries as well. You can use those:
+
+const firebaseUiAuthConfig = {
+    signInFlow: 'popup',
+    signInSuccessUrl: 'https://ncbpm-1.firebaseapp.com/login',
+    signInOptions: [
+        firebaseui_angular__WEBPACK_IMPORTED_MODULE_18__["firebase"].auth.GoogleAuthProvider.PROVIDER_ID,
+        // {
+        //   scopes: [
+        //     'public_profile',
+        //     'email',
+        //     'user_likes',
+        //     'user_friends'
+        //   ],
+        //   customParameters: {
+        //     'auth_type': 'reauthenticate'
+        //   },
+        //   provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID
+        // },
+        // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+        // firebase.auth.GithubAuthProvider.PROVIDER_ID,
+        {
+            requireDisplayName: false,
+            provider: firebaseui_angular__WEBPACK_IMPORTED_MODULE_18__["firebase"].auth.EmailAuthProvider.PROVIDER_ID,
+            signInMethod: firebaseui_angular__WEBPACK_IMPORTED_MODULE_18__["firebase"].auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD
+        },
+        firebaseui_angular__WEBPACK_IMPORTED_MODULE_18__["firebase"].auth.PhoneAuthProvider.PROVIDER_ID,
+    ],
+    tosUrl: 'https://ncbpm-1.firebaseapp.com/page404',
+    privacyPolicyUrl: 'https://ncbpm-1.firebaseapp.com/page404',
+    credentialHelper: firebaseui_angular__WEBPACK_IMPORTED_MODULE_18__["firebaseui"].auth.CredentialHelper.ACCOUNT_CHOOSER_COM
+};
 let AppModule = class AppModule {
 };
 AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -206,28 +254,23 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"],
             _angular_router__WEBPACK_IMPORTED_MODULE_11__["RouterModule"],
-            _angular_fire__WEBPACK_IMPORTED_MODULE_12__["AngularFireModule"].initializeApp(src_environments_environment__WEBPACK_IMPORTED_MODULE_14__["environment"].firebase),
-            _angular_fire_firestore__WEBPACK_IMPORTED_MODULE_13__["AngularFirestoreModule"],
+            firebaseui_angular__WEBPACK_IMPORTED_MODULE_18__["FirebaseUIModule"].forRoot(firebaseUiAuthConfig),
+            // SweetAlert2Module.forRoot(),
+            _angular_fire__WEBPACK_IMPORTED_MODULE_12__["AngularFireModule"].initializeApp(src_environments_environment__WEBPACK_IMPORTED_MODULE_15__["environment"].firebase),
+            _angular_fire_firestore__WEBPACK_IMPORTED_MODULE_14__["AngularFirestoreModule"],
+            _angular_fire_auth__WEBPACK_IMPORTED_MODULE_13__["AngularFireAuthModule"],
             _app_routing_module__WEBPACK_IMPORTED_MODULE_4__["AppRoutingModule"],
-            ngx_drag_drop__WEBPACK_IMPORTED_MODULE_15__["DndModule"],
+            ngx_drag_drop__WEBPACK_IMPORTED_MODULE_16__["DndModule"],
         ],
-        providers: [_service_form_service__WEBPACK_IMPORTED_MODULE_9__["FormService"], _service_alert_service__WEBPACK_IMPORTED_MODULE_10__["AlertService"]],
+        providers: [_service_form_service__WEBPACK_IMPORTED_MODULE_9__["FormService"], {
+                provide: 'HomeAuthGuard',
+                useValue: (route, state) => true
+            }, _service_Auth_service__WEBPACK_IMPORTED_MODULE_17__["AuthService"], _service_alert_service__WEBPACK_IMPORTED_MODULE_10__["AlertService"]],
         bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
     })
 ], AppModule);
 
 
-
-/***/ }),
-
-/***/ "./src/app/pages/404/error-page.component.css":
-/*!****************************************************!*\
-  !*** ./src/app/pages/404/error-page.component.css ***!
-  \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3BhZ2VzLzQwNC9lcnJvci1wYWdlLmNvbXBvbmVudC5jc3MifQ== */"
 
 /***/ }),
 
@@ -238,7 +281,18 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  error-page works!\n</p>\n"
+module.exports = "<!-- <firebase-ui></firebase-ui> -->\n<div class=\"m-5 p-5\">\n\n  <h2>Error404 <br>page Not found</h2>\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/pages/404/error-page.component.scss":
+/*!*****************************************************!*\
+  !*** ./src/app/pages/404/error-page.component.scss ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3BhZ2VzLzQwNC9lcnJvci1wYWdlLmNvbXBvbmVudC5zY3NzIn0= */"
 
 /***/ }),
 
@@ -265,7 +319,7 @@ ErrorPageComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-error-page',
         template: __webpack_require__(/*! ./error-page.component.html */ "./src/app/pages/404/error-page.component.html"),
-        styles: [__webpack_require__(/*! ./error-page.component.css */ "./src/app/pages/404/error-page.component.css")]
+        styles: [__webpack_require__(/*! ./error-page.component.scss */ "./src/app/pages/404/error-page.component.scss")]
     })
 ], ErrorPageComponent);
 
@@ -280,7 +334,7 @@ ErrorPageComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"form-bg d-flex align-items-center\">\n  <div class=\"container\">\n    <div class=\"row\">\n      <div class=\"m-auto form-horizontal\">\n        <p class=\"hint-text text-center mb-4\">Sign in Using</p>\n        <div class=\"form-group social-btn clearfix\">\n          <div class=\"row\">\n            <div class=\"col-md-6\">\n              <a class=\"btn btn-social\"><i class=\"fa fa-google\"></i> &nbsp;\n                Google</a>\n            </div>\n            <div class=\"col-md-6\">\n              <a class=\"btn btn-social\"><i class=\"fa fa-facebook\"></i> &nbsp;\n                Facebook</a>\n            </div>\n          </div>\n        </div>\n        <div class=\"or-seperator mb-2\"><b>or</b></div>\n        <div class=\"row\">\n          <div class=\"col-md-6\">\n            <a [class]=\"((emailTabActive)?'text-primary btn btn-social':'btn btn-social')\" (click)=\"changeTabe(true)\"><i\n                class=\"fa fa-email\"></i>\n              &nbsp;\n              Email</a>\n          </div>\n          <div class=\"col-md-6\">\n            <a [class]=\" ((!emailTabActive)?'text-primary btn btn-social':'btn btn-social')\"\n              (click)=\"changeTabe(false)\"><i class=\"fa fa-phone\"></i>\n              &nbsp;\n              phone</a>\n          </div>\n        </div>\n\n\n        <div *ngIf=\"emailTabActive\">\n\n          <form #emailLoginForm=\"ngForm\">\n            <div class=\"form-group mt-3 mb-4\">\n              <input type=\"email\" class=\"form-control\" pattern=\"[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$\"\n                [(ngModel)]=\"user.userName\" name=\"email\" placeholder=\"Email Id\" [required]=\"true\" #email=\"ngModel\">\n            </div>\n            <div [hidden]=\"email.valid || email.pristine \" class=\"alert alert-danger\">\n              Please Enter Valid Email Address\n            </div>\n            <div class=\"form-group mb-4\">\n              <input type=\"password\" class=\"form-control\" name=\"password\" [(ngModel)]=\"user.password\"\n                placeholder=\"Password\" required=\"required\">\n            </div>\n            <button type=\"submit\" (click)=\"login()\" [disabled]=\"emailLoginForm.invalid\" routerLink=\"/home\"\n              class=\"btn btn-primary w-100 mb-4\"> login</button>\n            <div class=\"form-footer\">\n              <span class=\"text-primary\" routerLink=\"/signUp\">Sign Up</span>\n            </div>\n          </form>\n        </div>\n\n\n        <div *ngIf=\"!emailTabActive\">\n\n          <form>\n\n            <div class=\"form-group mt-3 mb-4\">\n              <input type=\"text\" class=\"form-control\" pattern=\"^[0-9]{10,10}$\" [(ngModel)]=\"userPhone.phone\"\n                name=\"phone\" placeholder=\"Mobile No\" [required]=\"true\" #phone=\"ngModel\">\n              <button (click)=\"generateOTP()\" style=\"margin-top: -37px\" [disabled]=\" !phone.valid \"\n                class=\"btn btn-primary pull-right\">Send OTP</button>\n            </div>\n\n            <div [hidden]=\"phone.valid || phone.pristine \" class=\"alert alert-danger\">\n              Please Enter Valid Phone Number </div>\n            <div class=\"form-group mb-4\" *ngIf=\"sendOtpClick\">\n              <input type=\"text\" [ngModelOptions]=\"{standalone: true}\" pattern=\"^[0-9]{4,4}$\"\n                class=\"form-control otp-input\" [(ngModel)]=\"userPhone.otp\" name=\"otp\" placeholder=\"Enter OTP\"\n                [required]=\"true\" #otp=\"ngModel\">\n            </div>\n            <input (click)=\"login()\" routerLink=\"/home\" type=\"submit\" class=\"btn btn-primary w-100 mb-4\"\n              [disabled]=\"userPhone.otp !=otp\" value=\"Login\">\n            <!-- <input type=\"submit\" routerLink=\"/process\" class=\"btn btn-primary w-100 mb-4\" value=\"Login\"> -->\n            <div class=\"form-footer\">\n              <span class=\"text-primary\" routerLink=\"/signUp\">Sign Up</span>\n            </div>\n          </form>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>"
+module.exports = "<div class=\"form-bg d-flex align-items-center\">\n  <div class=\"container\">\n    <div class=\"row\">\n      <div class=\"m-auto form-horizontal\">\n        <p class=\"hint-text text-center mb-4\">Sign in Using</p>\n        <!-- <div class=\"form-group social-btn clearfix\">\n          <div class=\"row\">\n            <div class=\"col-md-6\">\n              <a class=\"btn btn-social\"><i class=\"fa fa-google\"></i> &nbsp;\n                Google</a>\n            </div>\n            <div class=\"col-md-6\">\n              <a class=\"btn btn-social\"><i class=\"fa fa-facebook\"></i> &nbsp;\n                Facebook</a>\n            </div>\n          </div>\n        </div> -->\n\n        <firebase-ui></firebase-ui>\n        <div class=\"or-seperator mb-2\"><b>or</b></div>\n        <div class=\"row\">\n          <div class=\"col-md-6\">\n            <a [class]=\"((emailTabActive)?'text-primary btn btn-social':'btn btn-social')\" (click)=\"changeTabe(true)\"><i\n                class=\"fa fa-email\"></i>\n              &nbsp;\n              Email</a>\n          </div>\n          <div class=\"col-md-6\">\n            <a [class]=\" ((!emailTabActive)?'text-primary btn btn-social':'btn btn-social')\"\n              (click)=\"changeTabe(false)\"><i class=\"fa fa-phone\"></i>\n              &nbsp;\n              phone</a>\n          </div>\n        </div>\n\n\n        <div *ngIf=\"emailTabActive\">\n\n          <form #emailLoginForm=\"ngForm\">\n            <div class=\"form-group mt-3 mb-4\">\n              <input type=\"email\" class=\"form-control\" pattern=\"[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$\"\n                [(ngModel)]=\"user.userName\" name=\"email\" placeholder=\"Email Id\" [required]=\"true\" #email=\"ngModel\">\n            </div>\n            <div [hidden]=\"email.valid || email.pristine \" class=\"alert alert-danger\">\n              Please Enter Valid Email Address\n            </div>\n            <div class=\"form-group mb-4\">\n              <input type=\"password\" class=\"form-control\" name=\"password\" [(ngModel)]=\"user.password\"\n                placeholder=\"Password\" required=\"required\">\n            </div>\n            <button type=\"submit\" (click)=\"LoginwithEmail()\" [disabled]=\"emailLoginForm.invalid\"\n              class=\"btn btn-primary w-100 mb-4\"> login</button>\n            <!-- routerLink=\"/home\" -->\n            <div class=\"form-footer\">\n              <span class=\"text-primary\" routerLink=\"/signUp\">Sign Up</span>\n            </div>\n          </form>\n        </div>\n\n\n        <div *ngIf=\"!emailTabActive\">\n\n          <form>\n\n            <div class=\"form-group mt-3 mb-4\">\n              <input type=\"text\" class=\"form-control\" pattern=\"^[0-9]{10,10}$\" [(ngModel)]=\"userPhone.phone\"\n                name=\"phone\" placeholder=\"Mobile No\" [required]=\"true\" #phone=\"ngModel\">\n              <button (click)=\"generateOTP()\" style=\"margin-top: -37px\" [disabled]=\" !phone.valid \"\n                class=\"btn btn-primary pull-right\">Send OTP</button>\n            </div>\n\n            <div [hidden]=\"phone.valid || phone.pristine \" class=\"alert alert-danger\">\n              Please Enter Valid Phone Number </div>\n            <div class=\"form-group mb-4\" *ngIf=\"sendOtpClick\">\n              <input type=\"text\" [ngModelOptions]=\"{standalone: true}\" pattern=\"^[0-9]{4,4}$\"\n                class=\"form-control otp-input\" [(ngModel)]=\"userPhone.otp\" name=\"otp\" placeholder=\"Enter OTP\"\n                [required]=\"true\" #otp=\"ngModel\">\n            </div>\n            <input (click)=\"LoginwithPhoneNo()\" routerLink=\"/home\" type=\"submit\" class=\"btn btn-primary w-100 mb-4\"\n              [disabled]=\"userPhone.otp !=otp\" value=\"Login\">\n            <!-- <input type=\"submit\" routerLink=\"/process\" class=\"btn btn-primary w-100 mb-4\" value=\"Login\"> -->\n            <div class=\"form-footer\">\n              <span class=\"text-primary\" routerLink=\"/signUp\">Sign Up</span>\n            </div>\n          </form>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -308,12 +362,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var src_app_service_alert_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/service/alert.service */ "./src/app/service/alert.service.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var src_app_service_Auth_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/service/Auth.service */ "./src/app/service/Auth.service.ts");
+
+
 
 
 
 let LoginComponent = class LoginComponent {
-    constructor(alertService) {
+    constructor(router, alertService, authService) {
+        this.router = router;
         this.alertService = alertService;
+        this.authService = authService;
         this.user = {
             userName: '',
             password: '',
@@ -322,34 +382,64 @@ let LoginComponent = class LoginComponent {
             phone: '',
             otp: null,
         };
+        this.actionCodeSettings = {
+            // URL you want to redirect back to. The domain (www.example.com) for this
+            // URL must be whitelisted in the Firebase Console.
+            url: 'https://www.example.com/finishSignUp?cartId=1234',
+            // This must be true.
+            handleCodeInApp: true,
+            iOS: {
+                bundleId: 'com.example.ios'
+            },
+            android: {
+                packageName: 'com.example.android',
+                installApp: true,
+                minimumVersion: '12'
+            },
+            dynamicLinkDomain: 'example.page.link'
+        };
         this.emailTabActive = true;
         this.sendOtpClick = false;
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user !== null) {
+            this.router.navigate(['/home']);
+        }
+        console.log(this.authService.isLoggedIn());
     }
     ngOnInit() {
+        // this.afAuth.auth.onAuthStateChanged((user) => {
+        //   if (user) {
+        //     // User is signed in.
+        //     const userdetails = {
+        //       name: user.displayName,
+        //       email: user.email,
+        //       phone: user.phoneNumber,
+        //       photoUrl: user.photoURL,
+        //       uid: user.uid
+        //     };
+        //     console.log(user);
+        //     localStorage.setItem('User', JSON.stringify(userdetails));
+        //     // this.router.navigate(['/home']);
+        //   } else {
+        //     // this.router.navigate(['/signUp']);
+        //   }
+        // });
     }
     changeTabe(val) {
         this.emailTabActive = val;
     }
-    // login(user) {
-    //   if (user.userName === 'Nyazkhan1996' && user.password === '12345678') {
-    //     this.router.navigate(['/home']);
-    //   }
-    // }
     generateOTP() {
         this.sendOtpClick = true;
         this.otp = Math.floor(1000 + Math.random() * 9000);
         this.alertService.showInfoAlert('your OTP is  ' + this.otp);
         // swal('your OTP is  ' + this.otp);
     }
-    login() {
-        this.alertService.showSuccessAlert('Login Up Successfuly');
-        // swal({
-        //   position: 'top-end',
-        //   type: 'success',
-        //   title: 'Login Successfuly',
-        //   showConfirmButton: false,
-        //   timer: 300
-        // });
+    LoginwithEmail() {
+        this.authService.SignIn(this.user.userName, this.user.password);
+    }
+    LoginwithPhoneNo() {
+    }
+    ForgotPassword(passwordResetEmail) {
     }
 };
 LoginComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -358,7 +448,9 @@ LoginComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: __webpack_require__(/*! ./login.component.html */ "./src/app/pages/login/login.component.html"),
         styles: [__webpack_require__(/*! ./login.component.scss */ "./src/app/pages/login/login.component.scss")]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(src_app_service_alert_service__WEBPACK_IMPORTED_MODULE_2__["AlertService"]))
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"])),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(src_app_service_alert_service__WEBPACK_IMPORTED_MODULE_2__["AlertService"])),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(src_app_service_Auth_service__WEBPACK_IMPORTED_MODULE_4__["AuthService"]))
 ], LoginComponent);
 
 
@@ -372,7 +464,7 @@ LoginComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"form-bg d-flex align-items-center\">\n    <div class=\"container\">\n        <div class=\"row\">\n            <div *ngIf=\"!showPasswdTab\" class=\"m-auto\">\n                <form class=\"form-horizontal\" #logingForm=\"ngForm\">\n                    <p class=\"hint-text text-center mb-4\">Sign Up</p>\n                    <div class=\"form-group social-btn clearfix\">\n                        <div class=\"row\">\n                            <div class=\"col-md-6\">\n                                <a href=\"#\" class=\"btn btn-social\"><i class=\"fa fa-google\"></i> &nbsp;\n                                    Google</a>\n                            </div>\n                            <div class=\"col-md-6\">\n                                <a href=\"#\" class=\"btn btn-social\"><i class=\"fa fa-facebook\"></i> &nbsp;\n                                    Facebook</a>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"or-seperator mb-2\"><b>or</b></div>\n\n                    <div class=\"form-group mb-4\">\n                        <input type=\"text\" class=\"form-control\" [(ngModel)]=\"user.name\" name=\"name\" placeholder=\"Name\"\n                            [required]=\"true\" #name=\"ngModel\">\n                    </div>\n                    <div [hidden]=\"name.valid || name.pristine \" class=\"alert alert-danger\">\n                        Please Enter Your Name\n                    </div>\n                    <div class=\"form-group mb-4\">\n                        <input type=\"email\" class=\"form-control\" pattern=\"[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$\"\n                            [(ngModel)]=\"user.email\" name=\"email\" placeholder=\"Email Id\" [required]=\"true\"\n                            #email=\"ngModel\">\n                    </div>\n                    <div [hidden]=\"email.valid || email.pristine \" class=\"alert alert-danger\">\n                        Please Enter Valid Email Address\n                    </div>\n                    <div class=\"form-group mb-4\">\n                        <input type=\"text\" class=\"form-control\" pattern=\"^[0-9]{10,10}$\" [(ngModel)]=\"user.phone\"\n                            name=\"phone\" placeholder=\"Mobile No\" [required]=\"true\" #phone=\"ngModel\">\n                        <button [disabled]=\"!logingForm.valid || sendOtpClick\" (click)=\"generateOTP()\"\n                            style=\"margin-top: -37px\" class=\"btn btn-primary pull-right\">Send OTP</button>\n                    </div>\n                    <div [hidden]=\"phone.valid || phone.pristine \" class=\"alert alert-danger\">\n                        Please Enter Valid Phone Number </div>\n                    <div class=\"form-group mb-4\" *ngIf=\"sendOtpClick\">\n                        <input type=\"text\" [ngModelOptions]=\"{standalone: true}\" pattern=\"^[0-9]{4,4}$\"\n                            class=\"form-control otp-input\" [(ngModel)]=\"user.otp\" name=\"otp\" placeholder=\"Enter OTP\"\n                            [required]=\"true\" #otp=\"ngModel\">\n                    </div>\n                    <input type=\"submit\" class=\"btn btn-primary w-100 mb-4\" [disabled]=\"user.otp !=otp\"\n                        (click)=\"submitSingUpForm()\" value=\"Submit\">\n                    <div class=\"form-footer text-right\">\n                        <a href=\"#\" class=\"btn btn-light btn-social\" routerLink=\"/login\">Log in</a>\n                    </div>\n                </form>\n            </div>\n            <div *ngIf=\"showPasswdTab\" class=\"m-auto\">\n                <form class=\"form-horizontal\" #PasswordForm=\"ngForm\">\n                    <p class=\"hint-text text-center mb-4\">Cretae Password</p>\n                    <div class=\"form-group mb-4\">\n                        <input type=\"password\"\n                            pattern=\"(?=^.{8,20}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\\s).*$\"\n                            class=\"form-control\" [required]=\"true\" #paswd=\"ngModel\" name=\"paswd\"\n                            [(ngModel)]=\"password.paswd\" placeholder=\"Type Password\">\n                    </div>\n\n                    <div [hidden]=\"paswd.valid || paswd.pristine \" class=\"alert alert-danger\">\n                        Please Enter Valid password</div>\n\n                    <div class=\"form-group mb-3\">\n                        <input type=\"password\" class=\"form-control\" name=\"confirmPaswd\"\n                            [(ngModel)]=\"password.confirmPaswd\" placeholder=\"Confirm Password\" [required]=\"true\"\n                            #confirmPaswd=\"ngModel\">\n                    </div>\n\n                    <div [hidden]=\"(password.paswd === password.confirmPaswd) || confirmPaswd.pristine \"\n                        class=\"alert alert-danger\">\n                        Password Dosn't Match</div>\n                    <div class=\"sign-up-validation mb-3\">\n                        <li> &nbsp; 8 Character</li>\n                        <li> &nbsp; 1 Uppercase</li>\n                        <li> &nbsp; 1 Lowercase</li>\n                        <li> &nbsp; 1 Number</li>\n                        <li> &nbsp; 1 Special Character</li>\n                        <!-- <li> Name not to be incluid</li> -->\n                    </div>\n\n\n                    <input type=\"submit\" routerLink='/home/process' class=\"btn btn-primary w-100 mb-4\"\n                        (click)=\"submitPassword()\"\n                        [disabled]=\"(password.paswd !== password.confirmPaswd) || !PasswordForm.valid \" value=\"Submit\">\n                </form>\n            </div>\n\n        </div>\n    </div>\n</div>"
+module.exports = "<div class=\"form-bg d-flex align-items-center\">\n\n    <div class=\"container\">\n        <div class=\"row\">\n            <div *ngIf=\"!showPasswdTab\" class=\"m-auto\">\n                <form class=\"form-horizontal\" #logingForm=\"ngForm\">\n                    <p class=\"hint-text text-center mb-4\">Sign Up</p>\n                    <div class=\"form-group social-btn clearfix\">\n                        <div class=\"row\">\n                            <div class=\"col-md-6\">\n                                <a href=\"#\" class=\"btn btn-social\"><i class=\"fa fa-google\"></i> &nbsp;\n                                    Google</a>\n                            </div>\n                            <div class=\"col-md-6\">\n                                <a href=\"#\" class=\"btn btn-social\"><i class=\"fa fa-facebook\"></i> &nbsp;\n                                    Facebook</a>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"or-seperator mb-2\"><b>or</b></div>\n\n                    <div class=\"form-group mb-4\">\n                        <input type=\"text\" class=\"form-control\" [(ngModel)]=\"user.name\" name=\"name\" placeholder=\"Name\"\n                            [required]=\"true\" #name=\"ngModel\">\n                    </div>\n                    <div [hidden]=\"name.valid || name.pristine \" class=\"alert alert-danger\">\n                        Please Enter Your Name\n                    </div>\n                    <div class=\"form-group mb-4\">\n                        <input type=\"email\" class=\"form-control\" pattern=\"[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$\"\n                            [(ngModel)]=\"user.email\" name=\"email\" placeholder=\"Email Id\" [required]=\"true\"\n                            #email=\"ngModel\">\n                    </div>\n                    <div [hidden]=\"email.valid || email.pristine \" class=\"alert alert-danger\">\n                        Please Enter Valid Email Address\n                    </div>\n                    <div class=\"form-group mb-4\">\n                        <input type=\"text\" class=\"form-control\" pattern=\"^[0-9]{10,10}$\" [(ngModel)]=\"user.phone\"\n                            name=\"phone\" placeholder=\"Mobile No\" [required]=\"true\" #phone=\"ngModel\">\n                        <button [disabled]=\"!logingForm.valid || sendOtpClick\" (click)=\"generateOTP()\"\n                            style=\"margin-top: -37px\" class=\"btn btn-primary pull-right\">Send OTP</button>\n                    </div>\n                    <div [hidden]=\"phone.valid || phone.pristine \" class=\"alert alert-danger\">\n                        Please Enter Valid Phone Number </div>\n                    <div class=\"form-group mb-4\" *ngIf=\"sendOtpClick\">\n                        <input type=\"text\" [ngModelOptions]=\"{standalone: true}\" pattern=\"^[0-9]{4,4}$\"\n                            class=\"form-control otp-input\" [(ngModel)]=\"user.otp\" name=\"otp\" placeholder=\"Enter OTP\"\n                            [required]=\"true\" #otp=\"ngModel\">\n                    </div>\n                    <input type=\"submit\" class=\"btn btn-primary w-100 mb-4\" [disabled]=\"user.otp !=otp\"\n                        (click)=\"submitSingUpForm()\" value=\"Submit\">\n                    <div class=\"form-footer text-right\">\n                        <a href=\"#\" class=\"btn btn-light btn-social\" routerLink=\"/login\">Log in</a>\n                    </div>\n                </form>\n            </div>\n            <div *ngIf=\"showPasswdTab\" class=\"m-auto\">\n                <form class=\"form-horizontal\" #PasswordForm=\"ngForm\">\n                    <p class=\"hint-text text-center mb-4\">Cretae Password</p>\n                    <div class=\"form-group mb-4\">\n                        <input type=\"password\"\n                            pattern=\"(?=^.{8,20}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\\s).*$\"\n                            class=\"form-control\" [required]=\"true\" #paswd=\"ngModel\" name=\"paswd\"\n                            [(ngModel)]=\"password.paswd\" placeholder=\"Type Password\">\n                    </div>\n\n                    <div [hidden]=\"paswd.valid || paswd.pristine \" class=\"alert alert-danger\">\n                        Please Enter Valid password</div>\n\n                    <div class=\"form-group mb-3\">\n                        <input type=\"password\" class=\"form-control\" name=\"confirmPaswd\"\n                            [(ngModel)]=\"password.confirmPaswd\" placeholder=\"Confirm Password\" [required]=\"true\"\n                            #confirmPaswd=\"ngModel\">\n                    </div>\n\n                    <div [hidden]=\"(password.paswd === password.confirmPaswd) || confirmPaswd.pristine \"\n                        class=\"alert alert-danger\">\n                        Password Dosn't Match</div>\n                    <div class=\"sign-up-validation mb-3\">\n                        <li> &nbsp; 8 Character</li>\n                        <li> &nbsp; 1 Uppercase</li>\n                        <li> &nbsp; 1 Lowercase</li>\n                        <li> &nbsp; 1 Number</li>\n                        <li> &nbsp; 1 Special Character</li>\n                    </div>\n\n\n                    <input type=\"submit\" class=\"btn btn-primary w-100 mb-4\" (click)=\"submitPassword()\"\n                        [disabled]=\"(password.paswd !== password.confirmPaswd) || !PasswordForm.valid \" value=\"Submit\">\n                </form>\n            </div>\n\n        </div>\n    </div>\n</div>\n\n\n<!-- <firebase-ui></firebase-ui> -->"
 
 /***/ }),
 
@@ -400,12 +492,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var src_app_service_alert_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/service/alert.service */ "./src/app/service/alert.service.ts");
+/* harmony import */ var _angular_fire_auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/fire/auth */ "./node_modules/@angular/fire/auth/es2015/index.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var src_app_service_Auth_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/service/Auth.service */ "./src/app/service/Auth.service.ts");
+
+
+
 
 
 
 let SignupComponent = class SignupComponent {
-    constructor(alertService) {
+    constructor(router, alertService, authService, afAuth) {
+        this.router = router;
         this.alertService = alertService;
+        this.authService = authService;
+        this.afAuth = afAuth;
         this.user = {
             name: '',
             email: '',
@@ -428,24 +529,21 @@ let SignupComponent = class SignupComponent {
         // swal('your OTP is  ' + this.otp);
     }
     submitSingUpForm() {
-        this.alertService.showSuccessAlert('Sing Up Successfuly');
-        // swal({
-        //   position: 'top-end',
-        //   type: 'success',
-        //   title: 'Sing Up Successfuly',
-        //   showConfirmButton: false,
-        //   timer: 1000
-        // });
         this.showPasswdTab = true;
     }
     submitPassword() {
-        this.alertService.showSuccessAlert('Password Create  Successfuly');
-        // swal({
-        //   position: 'top-end',
-        //   type: 'success',
-        //   title: 'Password Create  Successfuly',
-        //   showConfirmButton: false,
-        //   timer: 700
+        this.authService.SignUp(this.user, this.password.paswd);
+        // this.afAuth.auth.createUserWithEmailAndPassword(this.user.email, this.password.paswd).then((userCredential) => {
+        //   userCredential.useir.updateProfile({
+        //     displayName: ths.user.name,
+        //     // phoneNumber: this.user.phone
+        //   });
+        //   // this.insertUserData(userCredential).then(() => {
+        //   //   this.router.navigate(['/home']);
+        //   // });
+        // }).catch((error) => {
+        //   this.showPasswdTab = false;
+        //   this.alertService.showErrorAlert(error.message);
         // });
     }
 };
@@ -455,8 +553,166 @@ SignupComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: __webpack_require__(/*! ./signup.component.html */ "./src/app/pages/signup/signup.component.html"),
         styles: [__webpack_require__(/*! ./signup.component.scss */ "./src/app/pages/signup/signup.component.scss")]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(src_app_service_alert_service__WEBPACK_IMPORTED_MODULE_2__["AlertService"]))
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"])),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(src_app_service_alert_service__WEBPACK_IMPORTED_MODULE_2__["AlertService"])),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(src_app_service_Auth_service__WEBPACK_IMPORTED_MODULE_5__["AuthService"])),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](3, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_fire_auth__WEBPACK_IMPORTED_MODULE_3__["AngularFireAuth"]))
 ], SignupComponent);
+
+
+
+/***/ }),
+
+/***/ "./src/app/service/Auth.service.ts":
+/*!*****************************************!*\
+  !*** ./src/app/service/Auth.service.ts ***!
+  \*****************************************/
+/*! exports provided: AuthService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthService", function() { return AuthService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var firebase_app__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! firebase/app */ "./node_modules/firebase/app/dist/index.cjs.js");
+/* harmony import */ var firebase_app__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(firebase_app__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _angular_fire_auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/fire/auth */ "./node_modules/@angular/fire/auth/es2015/index.js");
+/* harmony import */ var _angular_fire_firestore__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/fire/firestore */ "./node_modules/@angular/fire/firestore/es2015/index.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _alert_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./alert.service */ "./src/app/service/alert.service.ts");
+
+
+
+
+
+
+
+let AuthService = class AuthService {
+    constructor(afs, // Inject Firestore service
+    afAuth, // Inject Firebase auth service
+    router, alertService, ngZone // NgZone service to remove outside scope warning
+    ) {
+        this.afs = afs;
+        this.afAuth = afAuth;
+        this.router = router;
+        this.alertService = alertService;
+        this.ngZone = ngZone;
+        /* Saving user data in localstorage when
+        logged in and setting up null when logged out */
+        this.afAuth.authState.subscribe(user => {
+            if (user) {
+                this.userData = user;
+                localStorage.setItem('user', JSON.stringify(this.userData));
+                JSON.parse(localStorage.getItem('user'));
+            }
+            else {
+                localStorage.setItem('user', null);
+                JSON.parse(localStorage.getItem('user'));
+            }
+        });
+    }
+    // Sign in with email/password
+    SignIn(email, password) {
+        return this.afAuth.auth.signInWithEmailAndPassword(email, password)
+            .then((result) => {
+            this.ngZone.run(() => {
+                this.router.navigate(['home']);
+            });
+            console.log(result.user);
+        }).catch((error) => {
+            this.alertService.showErrorAlert(error.message);
+        });
+    }
+    // Sign up with email/password
+    SignUp(user, password) {
+        return this.afAuth.auth.createUserWithEmailAndPassword(user.email, password)
+            .then((result) => {
+            /* Call the SendVerificaitonMail() function when new user sign
+            up and returns promise */
+            result.user.updateProfile({
+                displayName: user.name,
+            });
+            this.SendVerificationMail();
+            this.SetUserData(result.user, user.phone);
+        }).catch((error) => {
+            this.alertService.showErrorAlert(error.message);
+        });
+    }
+    // Send email verfificaiton when new user sign up
+    SendVerificationMail() {
+        return this.afAuth.auth.currentUser.sendEmailVerification()
+            .then(() => {
+            this.router.navigate(['/home']);
+            const win = window.open('https://gmail.com/mail', '_blank');
+            win.focus();
+        });
+    }
+    // Reset Forggot password
+    ForgotPassword(passwordResetEmail) {
+        return this.afAuth.auth.sendPasswordResetEmail(passwordResetEmail)
+            .then(() => {
+            this.alertService.showInfoAlert('Password reset email sent, check your inbox.');
+        }).catch((error) => {
+            this.alertService.showErrorAlert(error);
+        });
+    }
+    // Returns true when user is looged in and email is verified
+    isLoggedIn() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        return (user !== null && user.emailVerified !== false) ? true : false;
+    }
+    // Sign in with Google
+    GoogleAuth() {
+        return this.AuthLogin(new firebase_app__WEBPACK_IMPORTED_MODULE_2__["auth"].GoogleAuthProvider());
+    }
+    // Auth logic to run auth providers
+    AuthLogin(provider) {
+        return this.afAuth.auth.signInWithPopup(provider)
+            .then((result) => {
+            this.ngZone.run(() => {
+                this.router.navigate(['home']);
+            });
+            this.SetUserData(result.user);
+        }).catch((error) => {
+            this.alertService.showErrorAlert(error);
+        });
+    }
+    /* Setting up user data when sign in with username/password,
+    sign up with username/password and sign in with social auth
+    provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
+    SetUserData(user, phoneNo) {
+        const userRef = this.afs.doc(`users/${user.uid}`);
+        const userData = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            emailVerified: user.emailVerified,
+            phone: phoneNo
+        };
+        return userRef.set(userData, {
+            merge: true
+        });
+    }
+    // Sign out
+    SignOut() {
+        return this.afAuth.auth.signOut().then(() => {
+            localStorage.removeItem('user');
+            this.router.navigate(['login']);
+        });
+    }
+};
+AuthService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_fire_firestore__WEBPACK_IMPORTED_MODULE_4__["AngularFirestore"])),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_fire_auth__WEBPACK_IMPORTED_MODULE_3__["AngularFireAuth"])),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"])),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](3, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_alert_service__WEBPACK_IMPORTED_MODULE_6__["AlertService"])),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](4, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"]))
+], AuthService);
 
 
 
@@ -573,6 +829,42 @@ let AlertService = class AlertService {
 AlertService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({ providedIn: 'root' })
 ], AlertService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/service/auth.guard.ts":
+/*!***************************************!*\
+  !*** ./src/app/service/auth.guard.ts ***!
+  \***************************************/
+/*! exports provided: HomeAuthGuard */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HomeAuthGuard", function() { return HomeAuthGuard; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _Auth_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Auth.service */ "./src/app/service/Auth.service.ts");
+
+
+
+let HomeAuthGuard = class HomeAuthGuard {
+    constructor(authService) {
+        this.authService = authService;
+    }
+    canActivate(next, state) {
+        console.log('its work');
+        return this.authService.isLoggedIn();
+    }
+};
+HomeAuthGuard = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_Auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"]))
+], HomeAuthGuard);
 
 
 

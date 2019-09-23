@@ -1,5 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { AlertService } from 'src/app/service/alert.service';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/service/Auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -22,7 +26,19 @@ export class SignupComponent implements OnInit {
     paswd: '',
     confirmPaswd: ''
   };
-  constructor(@Inject(AlertService) private alertService: AlertService) { }
+  userData: any; // Save logged in user data
+
+  constructor(
+    @Inject(Router) private router: Router,
+    @Inject(AlertService) private alertService: AlertService,
+    @Inject(AuthService) private authService: AuthService,
+    @Inject(AngularFireAuth) public afAuth: AngularFireAuth, // Inject Firebase auth service
+
+
+  ) {
+
+
+  }
 
   ngOnInit() {
   }
@@ -37,29 +53,34 @@ export class SignupComponent implements OnInit {
   }
 
   submitSingUpForm() {
-
-    this.alertService.showSuccessAlert('Sing Up Successfuly');
-    // swal({
-    //   position: 'top-end',
-    //   type: 'success',
-    //   title: 'Sing Up Successfuly',
-    //   showConfirmButton: false,
-    //   timer: 1000
-    // });
     this.showPasswdTab = true;
   }
 
-
   submitPassword() {
-    this.alertService.showSuccessAlert('Password Create  Successfuly');
+    this.authService.SignUp(this.user, this.password.paswd);
+    // this.afAuth.auth.createUserWithEmailAndPassword(this.user.email, this.password.paswd).then((userCredential) => {
+    //   userCredential.useir.updateProfile({
+    //     displayName: ths.user.name,
+    //     // phoneNumber: this.user.phone
+    //   });
+    //   // this.insertUserData(userCredential).then(() => {
+    //   //   this.router.navigate(['/home']);
+    //   // });
+    // }).catch((error) => {
+    //   this.showPasswdTab = false;
 
-    // swal({
-    //   position: 'top-end',
-    //   type: 'success',
-    //   title: 'Password Create  Successfuly',
-    //   showConfirmButton: false,
-    //   timer: 700
+    //   this.alertService.showErrorAlert(error.message);
     // });
   }
+
+  // insertUserData(userCredential: firebase.auth.UserCredential) {
+  //   return this.firestore.doc(`Users/${userCredential.user.uid}`).set({
+  //     email: this.user.email,
+  //     firstName: this.user.name,
+  //     phone: this.user.phone,
+  //     role: 'admin'
+  //   });
+  // }
+
 }
 
