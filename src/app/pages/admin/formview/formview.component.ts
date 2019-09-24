@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import swal from 'sweetalert2';
 import { Params, Router, ActivatedRoute } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { element } from '@angular/core/src/render3';
 declare const $: any;
 @Component({
   selector: 'app-formview',
@@ -18,6 +19,9 @@ export class FormViewComponent implements OnInit {
   numberError = false;
 
   form: any;
+  attriWithOUTCondQues: any;
+  attributesWithCondQues: any;
+  conQuestList = [];
   formCurrentPage: any;
   currentPageIndex = 0;
   showTable = false;
@@ -64,8 +68,57 @@ export class FormViewComponent implements OnInit {
     // this.firestore.collection('formList/' + id).doc(id).get();
     // console.log(this.firestore.collection('formList/' + id));
     this.firestore.collection('formList').doc(id).get().subscribe(doc => {
-      this.form = doc.data();
-      console.log(this.form);
+      const completForm = doc.data();
+      // remove Conditional quetions from form  and save in new array
+      this.attriWithOUTCondQues = doc.data();
+      this.attributesWithCondQues = doc.data();
+
+      // attriWithOUTCondQues = completForm.attributes.filter(page => {
+      //   return page.field.forEach(el => {
+      //     return el.makeItCondsnl;
+      //   });
+      // });
+      // attributesWithCondQues = completForm.attributes.filter(page => {
+      //   page.field.forEach(el => {
+      //     return !el.makeItCondsnl;
+      //   });
+      // });
+      // this.form = completForm;
+
+      for (let i = 0; i < this.attriWithOUTCondQues.attributes.length; i++) {
+
+
+        for (let j = 0; j < this.attriWithOUTCondQues.attributes[i].field.length; j++) {
+
+
+          if (this.attriWithOUTCondQues.attributes[i].field[j].makeItCondsnl) {
+            this.conQuestList.push(this.attriWithOUTCondQues.attributes[i].field[j]);
+
+            this.attriWithOUTCondQues.attributes[i].field.splice(j, 1);
+          }
+        }
+      }
+      this.form = this.attriWithOUTCondQues;
+      console.log(this.conQuestList);
+
+      // for (let i = 0; i < this.attributesWithCondQues.attributes.length; i++) {
+
+
+      //   for (let j = 0; j < this.attributesWithCondQues.attributes[i].field.length; j++) {
+
+
+      //     if (!this.attributesWithCondQues.attributes[i].field[j].makeItCondsnl) {
+
+
+      //       this.attributesWithCondQues.attributes[i].field.splice(j, 1);
+      //     }
+      //   }
+      // }
+
+
+
+
+      console.log(this.attriWithOUTCondQues);
 
       this.formCurrentPage = this.form.attributes[this.currentPageIndex];
       $('.maker-input').css('fontFamily', this.form.theme.fontFamily);
@@ -219,8 +272,7 @@ export class FormViewComponent implements OnInit {
 
 
 
-  checkedState(item, val) {
-
+  checkedState(item, val, index) {
     console.log(val);
     // if (this.isValidObject(item.validOption)) {
     const selected = item.values.filter(c => c.value);
@@ -233,12 +285,134 @@ export class FormViewComponent implements OnInit {
     item.userResponse = selected.filter(c => c.value);
     console.log(item.userResponse);
 
-    // }
 
+    console.log(this.conQuestList);
+
+    this.conQuestList.forEach(el => {
+      if (item.id == el.ConditionalQuest.question.id) {
+
+
+
+
+        console.log('id match');
+        // debugger;
+
+
+        if (item.userResponse.length < 1) {
+          const indexValue = this.formCurrentPage.field.indexOf(el);
+          if (indexValue !== -1) {
+
+
+            this.formCurrentPage.field.splice(indexValue, 1);
+          }
+        } else {
+
+
+          // item.userResponse.forEach(obj => {
+          for (let m = 0; m < item.userResponse.length; m++) {
+            const obj = item.userResponse[m];
+
+            if (this.containLabel(el.ConditionalQuest.answers.label, item.userResponse)) {
+
+              if ((obj.label === el.ConditionalQuest.answers.label)) {
+                console.log('obj match');
+
+
+                if (obj.value) {
+                  if (!this.containsObject(el, this.formCurrentPage.field)) {
+                    this.formCurrentPage.field.splice(index + 1, 0, el);
+
+                  }
+
+                }
+              }
+
+
+
+              // else {
+
+              //   console.log(' its falls ');
+              //   // if (this.containLabel(el.ConditionalQuest.answers.label, item.userResponse)) {
+              //   console.log(this.containsObject(el, this.formCurrentPage.field));
+
+              //   // }
+
+              //   if (this.containsObject(el, this.formCurrentPage.field)) {
+              //     console.log('delete' + index + 1);
+
+              //     this.formCurrentPage.field.splice(index + 1, 1);
+
+              //   }
+              // }
+            } else {
+              const indexValue = this.formCurrentPage.field.indexOf(el);
+              if (indexValue !== -1) {
+
+
+                this.formCurrentPage.field.splice(indexValue, 1);
+              }
+            }
+          }
+
+        }
+
+      }
+    });
 
   }
 
-  checkAns() {
+  containLabel(label, list) {
+    let i;
+    for (i = 0; i < list.length; i++) {
+      if (list[i].label === label) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  containsObject(obj, list) {
+    let i;
+    for (i = 0; i < list.length; i++) {
+      if (list[i] === obj) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+
+  checkConditionalQuestForTrueFalse(item, index) {
+    // inputValue
+    this.conQuestList.forEach(el => {
+      if (item.id == el.ConditionalQuest.question.id) {
+
+
+        if (item.inputValue === el.ConditionalQuest.answers.value) {
+
+          if (!this.containsObject(el, this.formCurrentPage.field)) {
+            this.formCurrentPage.field.splice(index + 1, 0, el);
+
+          }
+
+        } else {
+          const indexValue = this.formCurrentPage.field.indexOf(el);
+          if (indexValue !== -1) {
+
+
+            this.formCurrentPage.field.splice(indexValue, 1);
+          }
+        }
+
+
+
+      }
+    });
+  }
+
+  checkConditionalQuestForYesNo() {
 
   }
 
@@ -421,6 +595,8 @@ export class FormViewComponent implements OnInit {
           }
 
           if ((el.fielType === 'yesNo') && (el.inputValue === '')) {
+            console.log(el);
+
             swal('Error', 'Choose Option For' + el.label, 'error');
             errorCount++;
             return;

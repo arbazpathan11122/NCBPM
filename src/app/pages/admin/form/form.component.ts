@@ -58,7 +58,6 @@ export class FormComponent implements OnInit {
     phone: ''
   };
 
-  conditionRequired = false;
   showConditionalQues: false;
   conditionalQuesList = [];
   conditionalAnsList = [];
@@ -513,7 +512,8 @@ export class FormComponent implements OnInit {
     if (list && (event.dropEffect === 'copy' || event.dropEffect === 'move')) {
 
       if (event.dropEffect === 'copy') {
-        event.data.name = event.data.type + '-' + new Date().getTime();
+        event.data.name = event.data.fielType + '-' + new Date().getTime();
+        event.data.id = new Date().getTime();
       }
       if (typeof index === 'undefined') {
         index = list.length;
@@ -524,7 +524,8 @@ export class FormComponent implements OnInit {
   }
   dblclickMove(event: DndDropEvent, list: any, item: any) {
     console.log(event);
-    item.name = item.type + '-' + new Date().getTime();
+    item.name = item.fielType + '-' + new Date().getTime();
+    item.id = new Date().getTime();
     console.log(item);
 
     list.splice(list.length, 0, JSON.parse(JSON.stringify(item)));
@@ -540,19 +541,6 @@ export class FormComponent implements OnInit {
 
     this.showProperties = true;
     this.selectedItem = item;
-
-    // setTimeout(() => {
-
-    // if (!this.isValidObject(this.selectedItem.validOption)) {
-    //   this.selectedItem.validOption = {};
-    // } else {
-    //   this.selectedItem.validOption = item.validOption;
-
-    // }
-    console.log(this.selectedItem);
-
-    // }, 1000);
-    // console.log(JSON.parse(JSON.stringify(item)));
 
     this.checkConditionalQuest();
     this.currentFieldIndex = i;
@@ -571,7 +559,10 @@ export class FormComponent implements OnInit {
     this.formCurrentPage.field.forEach(element => {
       // tslint:disable-next-line: max-line-length
       if ((element.fielType === 'yesNo') || (element.fielType === 'trueFalse') || (element.fielType === 'picture') || (element.fielType === 'multiple') || (element.fielType === 'dropdown')) {
-        this.conditionalQuesList.push(element);
+        if (this.selectedItem.id !== element.id) {
+
+          this.conditionalQuesList.push(element);
+        }
       }
 
 
@@ -684,7 +675,7 @@ export class FormComponent implements OnInit {
         //   this.formCurrentPage = [];
         // }
 
-        this.deletePage();
+        this.deletePage(i);
 
       }
     });
@@ -706,8 +697,7 @@ export class FormComponent implements OnInit {
   }
 
   submitbtn() {
-    // this.formDataForView = JSON.parse(JSON.stringify(this.model));
-    // console.log(this.formDataForView);
+
 
 
     this.model.attributes.forEach(element => {
@@ -801,10 +791,11 @@ export class FormComponent implements OnInit {
     this.formCurrentPage = this.model.attributes[this.currentPageIndex];
   }
 
-  deletePage() {
+  deletePage(index) {
     console.log('delete Page');
 
-    this.model.attributes.splice(this.currentPageIndex, 1);
+    this.model.attributes.splice(index, 1);
+    this.currentPageIndex = index;
     if (this.model.attributes.length == this.currentPageIndex) {
       this.currentPageIndex--;
     }
