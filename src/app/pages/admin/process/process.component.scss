@@ -32,10 +32,9 @@
         }
 
 
-
         .maker-input{
             display: flex;
-          }
+            }
         .maker-input .name-input{
             order: 2;
             display: block;
@@ -48,7 +47,8 @@
             width: 100%;
             box-sizing: border-box;
             color:rgb(123, 111, 251);
-            font-size: 14px;
+            font-size: 15px;
+            font-weight: 500
         }
         .maker-input .name-input:focus{
             outline: none;
@@ -60,20 +60,23 @@
             background: none;
             padding: 2px 2px 1px;
             line-height: 26px;
-            height: 30px;
+            height: 38px;
             border-style:groove;
             width: 100%;
-            color: #151948;
+            color: var(--black-color);
+            font-size: 22px;
+            border-bottom: 1px solid #d8d7d7 !important;
+        }
+        .user-input .name-input::placeholder{
+            color:var(--black-color);
         }
         .user-input .name-input:focus{
             outline: none;
         }
         .user-answer{
-            border-bottom:2px dashed #b8b8b8;
-            color:#b8b8b8;
+            border-bottom:2px dashed var(--lightgray-color);
+            color:var(--lightgray-color);
         }
-
-
        .voiletBG{
         background-color: #7b6ffb!important;    
         

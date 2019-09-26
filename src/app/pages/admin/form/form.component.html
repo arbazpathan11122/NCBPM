@@ -281,14 +281,14 @@
     <div class="property-tab">
       <div class="row">
         <div class="col-md-6">
-          <button (click)="showGenSetting = true" [class]="(showGenSetting) ? 'btn btn-primary': 'btn'">
+          <span (click)="showGenSetting = true" [class]="(showGenSetting) ? 'nav-link active': 'nav-link'">
             General
-          </button>
+          </span>
         </div>
         <div class="col-md-6">
-          <button (click)="showGenSetting = false" [class]="(!showGenSetting) ? 'btn btn-primary': 'btn'">
+          <span (click)="showGenSetting = false" [class]="(!showGenSetting) ? 'nav-link active': 'nav-link'">
             Individual
-          </button>
+          </span>
 
         </div>
       </div>
@@ -720,7 +720,7 @@
 
       <div class=" p-5">
 
-        <div class=" maker-input">
+        <div class=" maker-input mb-3">
           <label class="name-input">Page Name: <span class="red">*</span>
           </label>
         </div>
@@ -735,10 +735,14 @@
       </div>
 
 
-      <div class="modal-footer">
-        <button type="button" class="btn bg-light" data-dismiss="modal">Close</button>
-        <button type="button" class="btn voiletBG" data-dismiss="modal">Create</button>
+      <div class="modal-footer border-top-none pr-5 pb-5">
+        <button type="button" class="btn btn-purple-light" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-purple btn-purple-2" data-dismiss="modal">Create</button>
       </div>
+      <!-- <div class="modal-footer border-top-none p-2rem">
+        <button class="btn btn-purple-light" data-dismiss="modal" type="button">Close</button>
+        <button class="btn btn-purple btn-purple-2" type="button">Create</button>
+      </div> -->
     </div>
   </div>
 </div>
@@ -818,3 +822,9 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+

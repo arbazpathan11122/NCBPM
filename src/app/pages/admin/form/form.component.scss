@@ -127,7 +127,15 @@
   background-color: var(--main-purple-color)!important;    
   color: var(--white-color);
   }
-
+.vali-title{
+    padding: 2px 2px 1px;
+    line-height: 26px;
+    height: 35px;
+    position: absolute;
+    z-index: -1;
+    color: var(--lightgray-color);
+    font-size: inherit;
+}
 
 
 
