@@ -7,6 +7,7 @@ export const icons_and_fields = [
     //     subName: 'Format',
     //     icon: 'header.png',
     //     fielType: 'header',
+    // ConditionalQuest: {},
     //     tooltip: 'The first thing your users will see.',
     //     label: 'Enter Your Heading',
     //     type: 'text',
@@ -20,6 +21,7 @@ export const icons_and_fields = [
     //     subName: 'Format',
     //     icon: 'footer.png',
     //     fielType: 'footer',
+    // ConditionalQuest: {},
     //     tooltip: 'The last thing your users will see.',
     //     type: 'text',
     //     label: 'footer content',
@@ -34,6 +36,13 @@ export const icons_and_fields = [
         subName: 'Format',
         icon: 'short_text.png',
         fielType: 'text',
+        makeItCondsnl: false,
+        ConditionalQuest: {
+            showIf: true,
+            question: {},
+            answers: {}
+
+        },
         required: true,
         tooltip: 'Good for short answers, like names.',
         label: 'Enter your Question here',
@@ -43,8 +52,9 @@ export const icons_and_fields = [
         min: 0,
         max: 256,
         handle: true,
-        selestedValidation: '',
         userResponse: [],
+        validOption: {},
+
         formValidations: [
             {
                 label: ' Greater Then',
@@ -69,6 +79,13 @@ export const icons_and_fields = [
         subName: 'Format',
         icon: 'Number.png',
         fielType: 'number',
+        makeItCondsnl: false,
+        ConditionalQuest: {
+            showIf: true,
+            question: {},
+            answers: {}
+
+        },
         required: true,
         tooltip: 'Good for long answers, like the meaning of life',
         errorText: 'Custom Error Field',
@@ -76,8 +93,9 @@ export const icons_and_fields = [
         placeholder: 'Enter Amount',
         min: 0,
         max: 256,
-        selestedValidation: '',
         userResponse: [],
+        validOption: {},
+
         formValidations: [
             {
                 label: ' Greater Then',
@@ -104,6 +122,13 @@ export const icons_and_fields = [
         subName: 'Format',
         icon: 'statement.png',
         fielType: 'statement',
+        makeItCondsnl: false,
+        ConditionalQuest: {
+            showIf: true,
+            question: {},
+            answers: {}
+
+        },
         tooltip: 'say to your users without asking for a response.',
         label: 'Enter your Statement here',
         type: 'text',
@@ -118,6 +143,13 @@ export const icons_and_fields = [
         subName: 'Format',
         icon: 'mail.png',
         fielType: 'email',
+        makeItCondsnl: false,
+        ConditionalQuest: {
+            showIf: true,
+            question: {},
+            answers: {}
+
+        },
         required: true,
         tooltip: 'Ask for a email address.',
         type: 'email',
@@ -126,7 +158,6 @@ export const icons_and_fields = [
         inputValue: '',
         placeholder: 'Enter your email',
         errorText: 'Please enter a valid email',
-        selestedValidation: '',
         handle: true,
         mailType: '',
         emailList: []
@@ -140,6 +171,13 @@ export const icons_and_fields = [
         type: 'date',
         icon: 'date.png',
         fielType: 'date',
+        makeItCondsnl: false,
+        ConditionalQuest: {
+            showIf: true,
+            question: {},
+            answers: {}
+
+        },
         required: true,
         label: 'How old are you ?',
 
@@ -148,9 +186,10 @@ export const icons_and_fields = [
         placeholder: 'Date',
         minDate: '',
         maxDate: '',
-        selestedValidation: '',
 
         userResponse: [],
+        validOption: {},
+
         formValidations: [
             {
                 label: 'After',
@@ -173,6 +212,13 @@ export const icons_and_fields = [
         subName: 'Format',
         icon: 'website.png',
         fielType: 'website',
+        makeItCondsnl: false,
+        ConditionalQuest: {
+            showIf: true,
+            question: {},
+            answers: {}
+
+        },
         required: true,
         tooltip: 'Ask your audience to share a link.',
         errorText: 'Custom Error Field',
@@ -200,6 +246,13 @@ export const icons_and_fields = [
         subName: 'Number',
         icon: 'mobile_no.png',
         fielType: 'phone',
+        makeItCondsnl: false,
+        ConditionalQuest: {
+            showIf: true,
+            question: {},
+            answers: {}
+
+        },
         required: true,
         tooltip: 'Ask for a phone number with a right format.',
         errorText: 'Custom Error Field',
@@ -221,16 +274,24 @@ export const icons_and_fields = [
         subName: 'Format',
         icon: 'file_upload.png',
         fielType: 'file',
+        makeItCondsnl: false,
+        ConditionalQuest: {
+            showIf: true,
+            question: {},
+            answers: {}
+
+        },
         label: 'uploud your resume',
         required: true,
         tooltip: 'Ask for any type of file.',
         errorText: 'Custom Error Field',
-        selestedValidation: '',
         uploadedFileByUser: {
             name: '',
             url: '',
         },
         userResponse: [],
+        validOption: {},
+
         formValidations: [
             {
                 label: 'Kb',
@@ -257,6 +318,13 @@ export const icons_and_fields = [
         subName: 'Choice',
         icon: 'multiple_choice.png',
         fielType: 'multiple',
+        makeItCondsnl: false,
+        ConditionalQuest: {
+            showIf: true,
+            question: {},
+            answers: {}
+
+        },
         required: true,
         label: 'Enter question for multiselection',
         tooltip: 'Give your audience options to choose from.',
@@ -271,8 +339,9 @@ export const icons_and_fields = [
                 value: false
             }
         ],
-        selestedValidation: '',
         userResponse: [],
+        validOption: {},
+
         formValidations: [
 
             {
@@ -301,13 +370,20 @@ export const icons_and_fields = [
         subName: 'Choice',
         icon: 'picture_format.png',
         fielType: 'picture',
+        makeItCondsnl: false,
+        ConditionalQuest: {
+            showIf: true,
+            question: {},
+            answers: {}
+
+        },
         required: true,
         label: 'Select the picture',
         tooltip: 'Give your users image option to choose from.',
         errorText: 'Custom Error Field',
         values: [
             {
-                label: 'Enter Your Option Here',
+                label: 'Enter Your Option1 Here',
                 value: false,
                 img: '',
                 name: '',
@@ -320,9 +396,9 @@ export const icons_and_fields = [
 
             }
         ],
-        selestedValidation: '',
-        validOption: {},
         userResponse: [],
+        validOption: {},
+
         formValidations: [
             {
                 label: 'Select atleast',
@@ -351,6 +427,13 @@ export const icons_and_fields = [
         subName: 'Format',
         icon: 'dropdown.png',
         fielType: 'dropdown',
+        makeItCondsnl: false,
+        ConditionalQuest: {
+            showIf: true,
+            question: {},
+            answers: {}
+
+        },
         required: true,
         label: ' enter quetion for  selection',
         tooltip: 'Provide a list of options to choose from.',
@@ -365,9 +448,10 @@ export const icons_and_fields = [
                 value: false
             }
         ],
-        selestedValidation: '',
 
         userResponse: [],
+        validOption: {},
+
         formValidations: [
             {
                 label: 'Select atleast',
@@ -393,6 +477,7 @@ export const icons_and_fields = [
     //     subName: 'Dropdown',
     //     icon: 'conditional_dropdown.png',
     //     fielType: 'conditional',
+    // ConditionalQuest: {},
     //     required: true,
     //     tooltip: 'Ask your users the question depending on other answers.',
     //     label: 'Ask your users the question depending on other answers.',
@@ -407,6 +492,13 @@ export const icons_and_fields = [
         subName: 'Format',
         icon: 'yes_no.png',
         fielType: 'yesNo',
+        ConditionalQuest: {
+            makeItCondsnl: false,
+            showIf: true,
+            question: {},
+            answers: {}
+
+        },
         required: true,
         tooltip: 'Give your users just three options.',
         errorText: 'Custom Error Field',
@@ -436,6 +528,7 @@ export const icons_and_fields = [
     //     subName: 'Format',
     //     icon: 'payment.png',
     //     fielType: '',
+    // ConditionalQuest: {},
     //     required: true,
     //     tooltip: '',
     //     errorText: 'Custom Error Field',
@@ -447,6 +540,13 @@ export const icons_and_fields = [
         subName: 'Format',
         icon: 'true_false.png',
         fielType: 'trueFalse',
+        makeItCondsnl: false,
+        ConditionalQuest: {
+            showIf: true,
+            question: {},
+            answers: {}
+
+        },
         required: true,
         tooltip: 'Ask your users is it true or not.',
         errorText: 'Custom Error Field',
@@ -474,6 +574,14 @@ export const icons_and_fields = [
         subName: 'Scale',
         icon: 'rating.png',
         fielType: 'rating',
+        makeItCondsnl: false,
+        ConditionalQuest: {
+            showIf: true,
+            question: {},
+
+            answers: {}
+
+        },
         required: true,
         label: 'Rate our product',
         tooltip: 'Ask them to rate something.',
@@ -526,6 +634,7 @@ export const icons_and_fields = [
     //     subName: 'Format',
     //     icon: 'table.png',
     //     fielType: 'table',
+    // ConditionalQuest: {},
     //     required: true,
     //     tooltip: '',
     //     label: 'Enter Footer contain',
@@ -544,4 +653,12 @@ export class Customer {
     name: string;
     age: number;
     active = true;
-  }
+}
+export interface User {
+    uid: string;
+    email: string;
+    displayName: string;
+    photoURL: string;
+    emailVerified: boolean;
+    phone: number;
+}

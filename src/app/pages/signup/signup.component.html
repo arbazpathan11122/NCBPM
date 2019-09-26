@@ -1,4 +1,5 @@
 <div class="form-bg d-flex align-items-center">
+
     <div class="container">
         <div class="row">
             <div *ngIf="!showPasswdTab" class="m-auto">
@@ -81,12 +82,10 @@
                         <li> &nbsp; 1 Lowercase</li>
                         <li> &nbsp; 1 Number</li>
                         <li> &nbsp; 1 Special Character</li>
-                        <!-- <li> Name not to be incluid</li> -->
                     </div>
 
 
-                    <input type="submit" routerLink='/home/process' class="btn btn-primary w-100 mb-4"
-                        (click)="submitPassword()"
+                    <input type="submit" class="btn btn-primary w-100 mb-4" (click)="submitPassword()"
                         [disabled]="(password.paswd !== password.confirmPaswd) || !PasswordForm.valid " value="Submit">
                 </form>
             </div>
@@ -94,3 +93,6 @@
         </div>
     </div>
 </div>
+
+
+<!-- <firebase-ui></firebase-ui> -->

@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import swal from 'sweetalert2';
 import { Params, Router, ActivatedRoute } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { element } from '@angular/core/src/render3';
 declare const $: any;
 @Component({
   selector: 'app-formview',
@@ -18,6 +19,10 @@ export class FormViewComponent implements OnInit {
   numberError = false;
 
   form: any;
+  attriWithOUTCondQues: any;
+  attributesWithCondQues: any;
+  conditionalQuestionList = [];
+  nonConditionalQuestionList = [];
   formCurrentPage: any;
   currentPageIndex = 0;
   showTable = false;
@@ -64,8 +69,31 @@ export class FormViewComponent implements OnInit {
     // this.firestore.collection('formList/' + id).doc(id).get();
     // console.log(this.firestore.collection('formList/' + id));
     this.firestore.collection('formList').doc(id).get().subscribe(doc => {
-      this.form = doc.data();
-      console.log(this.form);
+      const completForm = doc.data();
+      // remove Conditional quetions from form  and save in new array
+      this.attriWithOUTCondQues = doc.data();
+      this.attributesWithCondQues = doc.data();
+
+
+      for (let i = 0; i < completForm.attributes.length; i++) {
+
+        this.attriWithOUTCondQues.attributes[i].field = this.attributesWithCondQues.attributes[i].field.filter(item => !item.makeItCondsnl);
+
+        this.attributesWithCondQues.attributes[i].field.forEach(elem => {
+          if (elem.makeItCondsnl) {
+            this.conditionalQuestionList.push(elem);
+          } else {
+            this.nonConditionalQuestionList.push(elem);
+
+          }
+        });
+      }
+      this.form = this.attriWithOUTCondQues;
+      console.log(this.attriWithOUTCondQues);
+
+      console.log('con');
+      console.log(this.conditionalQuestionList);
+
 
       this.formCurrentPage = this.form.attributes[this.currentPageIndex];
       $('.maker-input').css('fontFamily', this.form.theme.fontFamily);
@@ -77,10 +105,25 @@ export class FormViewComponent implements OnInit {
       this.changeAnsColor();
     });
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
   changeQuestColor() {
     const nodes = document.getElementsByClassName('maker-input') as HTMLCollectionOf<HTMLElement>;
+    // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i].getElementsByClassName('name-input') as HTMLCollectionOf<HTMLElement>;
+      // tslint:disable-next-line: prefer-for-of
       for (let j = 0; j < node.length; j++) {
         node[j].style.color = this.form.theme.qestColor;
 
@@ -219,8 +262,7 @@ export class FormViewComponent implements OnInit {
 
 
 
-  checkedState(item, val) {
-
+  checkedState(item, val, index) {
     console.log(val);
     // if (this.isValidObject(item.validOption)) {
     const selected = item.values.filter(c => c.value);
@@ -233,12 +275,137 @@ export class FormViewComponent implements OnInit {
     item.userResponse = selected.filter(c => c.value);
     console.log(item.userResponse);
 
-    // }
 
+    console.log(this.conditionalQuestionList);
+
+    this.conditionalQuestionList.forEach(el => {
+      if (item.id == el.ConditionalQuest.question.id) {
+
+
+
+
+        console.log('id match');
+        // debugger;
+
+
+        if (item.userResponse.length < 1) {
+          const indexValue = this.formCurrentPage.field.indexOf(el);
+          if (indexValue !== -1) {
+
+
+            // this.formCurrentPage.field.splice(indexValue, 1);
+            this.removeDependentQues1stThenDeleteQuestion(indexValue, el);
+          }
+        } else {
+
+
+          // item.userResponse.forEach(obj => {
+          for (let m = 0; m < item.userResponse.length; m++) {
+            const obj = item.userResponse[m];
+
+            if (this.containLabel(el.ConditionalQuest.answers.label, item.userResponse)) {
+
+              if ((obj.label === el.ConditionalQuest.answers.label)) {
+                console.log('obj match');
+
+
+                if (obj.value) {
+                  if (!this.containsObject(el, this.formCurrentPage.field)) {
+                    this.formCurrentPage.field.splice(index + 1, 0, el);
+
+                  }
+
+                }
+              }
+
+
+
+              // else {
+
+              //   console.log(' its falls ');
+              //   // if (this.containLabel(el.ConditionalQuest.answers.label, item.userResponse)) {
+              //   console.log(this.containsObject(el, this.formCurrentPage.field));
+
+              //   // }
+
+              //   if (this.containsObject(el, this.formCurrentPage.field)) {
+              //     console.log('delete' + index + 1);
+
+              //     this.formCurrentPage.field.splice(index + 1, 1);
+
+              //   }
+              // }
+            } else {
+              const indexValue = this.formCurrentPage.field.indexOf(el);
+              if (indexValue !== -1) {
+
+
+                // this.formCurrentPage.field.splice(indexValue, 1);
+                this.removeDependentQues1stThenDeleteQuestion(indexValue, el);
+              }
+            }
+          }
+
+        }
+
+      }
+    });
 
   }
 
-  checkAns() {
+  containLabel(label, list) {
+    let i;
+    for (i = 0; i < list.length; i++) {
+      if (list[i].label === label) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  containsObject(obj, list) {
+    let i;
+    for (i = 0; i < list.length; i++) {
+      if (list[i] === obj) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+
+  checkConditionalQuestForTrueFalse(item, index) {
+    // inputValue
+    this.conditionalQuestionList.forEach(el => {
+      if (item.id == el.ConditionalQuest.question.id) {
+
+
+        if (item.inputValue === el.ConditionalQuest.answers.value) {
+
+          if (!this.containsObject(el, this.formCurrentPage.field)) {
+            this.formCurrentPage.field.splice(index + 1, 0, el);
+
+          }
+
+        } else {
+          const indexValue = this.formCurrentPage.field.indexOf(el);
+          if (indexValue !== -1) {
+
+
+            // this.formCurrentPage.field.splice(indexValue, 1);
+            this.removeDependentQues1stThenDeleteQuestion(indexValue, el);
+          }
+        }
+
+
+
+      }
+    });
+  }
+
+  checkConditionalQuestForYesNo() {
 
   }
 
@@ -421,6 +588,8 @@ export class FormViewComponent implements OnInit {
           }
 
           if ((el.fielType === 'yesNo') && (el.inputValue === '')) {
+            console.log(el);
+
             swal('Error', 'Choose Option For' + el.label, 'error');
             errorCount++;
             return;
@@ -437,7 +606,7 @@ export class FormViewComponent implements OnInit {
 
   }
 
-  onItemSelect(event, item) {
+  onItemSelect(event, item, index, ) {
     console.log(event);
 
     if (this.isValidObject(item.validOption)) {
@@ -459,13 +628,99 @@ export class FormViewComponent implements OnInit {
       }
 
     }
-
-
-
-    // this.DropDownSettings = Object.assign({}, this.DropDownSettings, { limitSelection: 2 });
-
     console.log(item);
-
+    this.checkConditionalquestForDropDown(event, item, index, true);
   }
 
+
+  checkConditionalquestForDropDown(event, item, index, select) {
+    this.conditionalQuestionList.forEach(el => {
+      if (item.id == el.ConditionalQuest.question.id) {
+        console.log('id match');
+        console.log(event);
+
+        if (el.ConditionalQuest.answers.label === event) {
+          console.log('label match');
+
+          if (select) {
+            this.formCurrentPage.field.splice(index + 1, 0, el);
+            console.log('questio push ');
+
+          } else {
+            console.log('questio remove ');
+            const indexValue = this.formCurrentPage.field.indexOf(el);
+            if (indexValue !== -1) {
+
+
+              // this.formCurrentPage.field.splice(indexValue, 1);
+              this.removeDependentQues1stThenDeleteQuestion(indexValue, el);
+
+            }
+          }
+
+
+        }
+      }
+    });
+  }
+
+
+
+  removeDependentQues1stThenDeleteQuestion(index, el) {
+    const QuestId = el.id;
+    if ((el.fielType === 'picture') || (el.fielType === 'multiple')) {
+      el.userResponse = [];
+      console.log(el);
+      el.values.forEach(val => {
+        val.value = false;
+      });
+      this.formCurrentPage.field.splice(index, 1);
+    } else if ((el.fielType === 'dropdown')) {
+      el.userResponse = [];
+      this.formCurrentPage.field.splice(index, 1);
+
+    } else if ((el.fielType === 'trueFalse') || (el.fielType === 'yesNo')) {
+      el.inputValue = '';
+      this.formCurrentPage.field.splice(index, 1);
+
+    } else if (el.fielType === 'rating') {
+      el.RatingByUser = '';
+      this.formCurrentPage.field.splice(index, 1);
+
+    } else if (el.fielType === 'file') {
+      el.uploadedFileByUser = {
+        name: '',
+        url: '',
+      };
+      this.formCurrentPage.field.splice(index, 1);
+
+    } else {
+      el.value = '';
+      this.formCurrentPage.field.splice(index, 1);
+
+    }
+    const CondQues = this.formCurrentPage.field.filter(elem => elem.makeItCondsnl);
+    console.log(CondQues);
+
+    for (let i = 0; i < CondQues.length; i++) {
+      console.log('its work cond' + i);
+      console.log(QuestId + 'condQuestId ' + CondQues[i].ConditionalQuest.question.id);
+
+      if (CondQues[i].ConditionalQuest.question.id == QuestId) {
+        const indexValue = this.formCurrentPage.field.indexOf(CondQues[i]);
+        console.log('id match');
+
+        if (indexValue !== -1) {
+          console.log('repeat' + 1);
+
+          this.removeDependentQues1stThenDeleteQuestion(indexValue, CondQues[i]);
+
+        }
+      }
+
+
+    }
+  }
 }
+
+

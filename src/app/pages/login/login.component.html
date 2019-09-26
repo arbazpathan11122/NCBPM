@@ -3,7 +3,7 @@
     <div class="row">
       <div class="m-auto form-horizontal">
         <p class="hint-text text-center mb-4">Sign in Using</p>
-        <div class="form-group social-btn clearfix">
+        <!-- <div class="form-group social-btn clearfix">
           <div class="row">
             <div class="col-md-6">
               <a class="btn btn-social"><i class="fa fa-google"></i> &nbsp;
@@ -14,7 +14,9 @@
                 Facebook</a>
             </div>
           </div>
-        </div>
+        </div> -->
+
+        <firebase-ui></firebase-ui>
         <div class="or-seperator mb-2"><b>or</b></div>
         <div class="row">
           <div class="col-md-6">
@@ -46,8 +48,9 @@
               <input type="password" class="form-control" name="password" [(ngModel)]="user.password"
                 placeholder="Password" required="required">
             </div>
-            <button type="submit" (click)="login()" [disabled]="emailLoginForm.invalid" routerLink="/home"
+            <button type="submit" (click)="LoginwithEmail()" [disabled]="emailLoginForm.invalid"
               class="btn btn-primary w-100 mb-4"> login</button>
+            <!-- routerLink="/home" -->
             <div class="form-footer">
               <span class="text-primary" routerLink="/signUp">Sign Up</span>
             </div>
@@ -73,7 +76,7 @@
                 class="form-control otp-input" [(ngModel)]="userPhone.otp" name="otp" placeholder="Enter OTP"
                 [required]="true" #otp="ngModel">
             </div>
-            <input (click)="login()" routerLink="/home" type="submit" class="btn btn-primary w-100 mb-4"
+            <input (click)="LoginwithPhoneNo()" routerLink="/home" type="submit" class="btn btn-primary w-100 mb-4"
               [disabled]="userPhone.otp !=otp" value="Login">
             <!-- <input type="submit" routerLink="/process" class="btn btn-primary w-100 mb-4" value="Login"> -->
             <div class="form-footer">

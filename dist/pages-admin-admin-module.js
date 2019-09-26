@@ -80,7 +80,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let AdminComponent = class AdminComponent {
-    constructor() { }
+    constructor() {
+    }
     ngOnInit() {
     }
 };
@@ -238,7 +239,7 @@ FooterComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-lg navbar-light fixed-top p-0\">\n    <!-- <a class=\"navbar-brand\" >Navbar</a> -->\n    <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarSupportedContent\"\n        aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n        <span class=\"navbar-toggler-icon\"></span>\n    </button>\n\n    <div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">\n        <ul class=\"navbar-nav left-menu mr-auto\">\n            <li class=\"nav-item active\">\n                <a class=\"nav-link lh-49\" (click)=\"goToProcess()\"><i class=\"fa fa-home\"></i>&nbsp;\n                    Home <span class=\"sr-only\">(current)</span></a>\n            </li>\n            <!-- <li class=\"nav-item\">\n              <div class=\"input-group p-4\">\n                  <div class=\"input-group-prepend\">\n                      <span class=\"input-group-text\" id=\"basic-addon1\"><i class=\"fa fa-search\"></i></span>\n                  </div>\n                  <input style=\"border:none\" type=\"text\" class=\"form-control\"\n                      placeholder=\"Search any workflow by category or name from here\" aria-label=\"Username\"\n                      aria-describedby=\"basic-addon1\">\n              </div>\n\n          </li> -->\n        </ul>\n\n        <div class=\"navbar-nav abs-center-x\">\n            <div class=\"process-part row\">\n                <div class=\"col-4\">\n                    <div class=\"bd-highlight btn-primary  pro-button mx-auto\">\n                    </div>\n                    <div class=\"text-center mt-1\">Form</div>\n                </div>\n                <div class=\"col-4\">\n                    <div class=\"bd-highlight   pro-button mx-auto\">\n                    </div>\n                    <div class=\"text-center mt-1\">Process</div>\n                </div>\n                <div class=\"col-4\">\n                    <div class=\"bd-highlight pro-button mx-auto\">\n                    </div>\n                    <div class=\"text-center mt-1\">Publish</div>\n                </div>\n            </div>\n        </div>\n\n        <ul class=\"right-menu navbar-nav\">\n\n            <li class=\"nav-item\">\n                <a class=\"nav-link lh-49\"><i style=\"font-size: 18px;\" class=\"fa fa-bell\"></i></a>\n            </li>\n            <li class=\"nav-item dropdown\">\n                <a class=\"nav-link \" id=\"navbarDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\"\n                    aria-expanded=\"false\"><img class=\"profile-img mr-2\" src=\"assets/img/user.jpg\" alt=\"Avatar\">\n                    <div class=\"right-menu float-right\">\n                        <span>Abhinav</span>\n                        <br>\n                        <span style=\"font-size: 14px\">Super-admin</span>\n                    </div>\n                </a>\n                <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown\">\n                    <a class=\"dropdown-item\">Profile</a>\n                    <a class=\"dropdown-item\" routerLink=\"/login\">Log out</a>\n                </div>\n            </li>\n        </ul>\n    </div>\n</nav>"
+module.exports = "<nav class=\"navbar navbar-expand-lg navbar-light fixed-top p-0\">\n    <!-- <a class=\"navbar-brand\" >Navbar</a> -->\n    <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarSupportedContent\"\n        aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n        <span class=\"navbar-toggler-icon\"></span>\n    </button>\n\n    <div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">\n        <ul class=\"navbar-nav left-menu mr-auto\">\n            <li class=\"nav-item active\">\n                <a class=\"nav-link lh-49\" (click)=\"goToProcess()\"><i class=\"fa fa-home\"></i>&nbsp;\n                    Home <span class=\"sr-only\">(current)</span></a>\n            </li>\n            <!-- <li class=\"nav-item\">\n              <div class=\"input-group p-4\">\n                  <div class=\"input-group-prepend\">\n                      <span class=\"input-group-text\" id=\"basic-addon1\"><i class=\"fa fa-search\"></i></span>\n                  </div>\n                  <input style=\"border:none\" type=\"text\" class=\"form-control\"\n                      placeholder=\"Search any workflow by category or name from here\" aria-label=\"Username\"\n                      aria-describedby=\"basic-addon1\">\n              </div>\n\n          </li> -->\n        </ul>\n\n        <div class=\"navbar-nav abs-center-x\">\n            <div class=\"process-part row\">\n                <div class=\"col-4\">\n                    <div class=\"bd-highlight btn-primary  pro-button mx-auto\">\n                    </div>\n                    <div class=\"text-center mt-1\">Form</div>\n                </div>\n                <div class=\"col-4\">\n                    <div class=\"bd-highlight   pro-button mx-auto\">\n                    </div>\n                    <div class=\"text-center mt-1\">Process</div>\n                </div>\n                <div class=\"col-4\">\n                    <div class=\"bd-highlight pro-button mx-auto\">\n                    </div>\n                    <div class=\"text-center mt-1\">Publish</div>\n                </div>\n            </div>\n        </div>\n\n        <ul class=\"right-menu navbar-nav\">\n\n            <li class=\"nav-item\">\n                <a class=\"nav-link lh-49\"><i style=\"font-size: 18px;\" class=\"fa fa-bell\"></i></a>\n            </li>\n            <li class=\"nav-item dropdown\">\n                <a class=\"nav-link \" id=\"navbarDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\"\n                    aria-expanded=\"false\"><img class=\"profile-img mr-2\" src=\"assets/img/user.jpg\" alt=\"Avatar\">\n                    <div class=\"right-menu float-right\">\n                        <span style=\"font-size: 18px\">{{user.name}}</span>\n                        <br>\n                        <span style=\"font-size: 10px\">{{user.role}}</span>\n                        <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown\">\n                            <a class=\"dropdown-item\">{{user.email}}</a>\n                            <a class=\"dropdown-item\">{{user.phone}}</a>\n                            <!-- <a class=\"dropdown-item\">{{user.email}}</a> -->\n\n                            <a class=\"dropdown-item\" (click)=\"SignOut()\">Log out</a>\n                        </div>\n                    </div>\n                </a>\n            </li>\n        </ul>\n    </div>\n</nav>"
 
 /***/ }),
 
@@ -266,17 +267,37 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _angular_fire_auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/fire/auth */ "./node_modules/@angular/fire/auth/es2015/index.js");
+/* harmony import */ var src_app_service_alert_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/service/alert.service */ "./src/app/service/alert.service.ts");
+
+
 
 
 
 let NavBarComponent = class NavBarComponent {
-    constructor(router) {
+    constructor(router, alertService, afAuth) {
         this.router = router;
+        this.alertService = alertService;
+        this.afAuth = afAuth;
+        this.user = {
+            name: 'nyaz khan',
+            email: 'khannyaz1705@gmail.com',
+            phone: 9017697290,
+            role: 'Admin'
+        };
+        // JSON.parse(localStorage.getItem('User'));
     }
     ngOnInit() {
     }
     goToProcess() {
+        this.alertService.showLoader('Loading....');
         this.router.navigate(['/home']);
+    }
+    SignOut() {
+        return this.afAuth.auth.signOut().then(() => {
+            localStorage.clear();
+            this.router.navigate(['/login']);
+        });
     }
 };
 NavBarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -285,7 +306,9 @@ NavBarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: __webpack_require__(/*! ./nav-bar.component.html */ "./src/app/pages/components/nav-bar/nav-bar.component.html"),
         styles: [__webpack_require__(/*! ./nav-bar.component.scss */ "./src/app/pages/components/nav-bar/nav-bar.component.scss")]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]))
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"])),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(src_app_service_alert_service__WEBPACK_IMPORTED_MODULE_4__["AlertService"])),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_fire_auth__WEBPACK_IMPORTED_MODULE_3__["AngularFireAuth"]))
 ], NavBarComponent);
 
 
