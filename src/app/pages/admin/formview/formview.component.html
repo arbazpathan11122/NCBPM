@@ -245,7 +245,7 @@
             <div class="user-input form-check-inline" *ngFor="let opt of item.values">
 
               <label class="Custom-Radio-Buttons">
-                <input type="radio" [value]="opt.value" (click)="checkConditionalQuestForTrueFalse(item , inVal)"
+                <input type="radio" [value]="opt.value" (change)="checkConditionalQuestForTrueFalse(item , inVal)"
                   name="{{item.name}}" [(ngModel)]="item.inputValue" required="{{item.required}}">
                 {{opt.label}} &nbsp; &nbsp; &nbsp;
                 <span class="checkmark-dot"></span>
@@ -264,7 +264,7 @@
 
               <label class="Custom-Radio-Buttons">
                 {{opt.label}}
-                <input type="radio" [value]="opt.value" (click)="checkConditionalQuestForTrueFalse(item , inVal)"
+                <input type="radio" [value]="opt.value" (change)="checkConditionalQuestForTrueFalse(item , inVal)"
                   name="{{item.name}}" [(ngModel)]="item.inputValue" required="{{item.required}}">
                 <span class="checkmark-dot"></span>
               </label>
@@ -312,8 +312,9 @@
               <span *ngIf="item.required" class="red">*</span> <label class="name-input">{{item.label}}</label>
             </div>
             <ng-multiselect-dropdown [data]="item.values" [(ngModel)]="item.userResponse"
-              [ngModelOptions]="{standalone: true}" (onSelect)="onItemSelect($event ,item)"
-              [settings]="DropDownSettings">
+              [ngModelOptions]="{standalone: true}"
+              (onDeSelect)="checkConditionalquestForDropDown($event, item, inVal, false)"
+              (onSelect)="onItemSelect($event ,item, inVal)" [settings]="DropDownSettings">
             </ng-multiselect-dropdown>
 
             <ng-container *ngIf="isValidObject(item.validOption)">

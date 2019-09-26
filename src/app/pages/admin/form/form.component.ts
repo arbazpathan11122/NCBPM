@@ -696,14 +696,18 @@ export class FormComponent implements OnInit {
     this.showBtn = !this.showBtn;
   }
 
-  submitbtn() {
+  submitbtn(navigate) {
 
-
+    let errorCount = 0;
+    let checkAllCond = 0;
+    let checkPageCond = 0;
 
     this.model.attributes.forEach(element => {
 
       element.field.forEach(el => {
-
+        if (el.makeItCondsnl) {
+          checkPageCond++;
+        }
         if (((el.fielType === 'email') && (el.emailList.length < 1))) {
           el.emailList = this.emailDropdownList;
         }
@@ -722,14 +726,54 @@ export class FormComponent implements OnInit {
             el.validOption = {};
           }
         }
+
+        if (el.makeItCondsnl && !this.isValidObject(el.ConditionalQuest.answers)) {
+          errorCount++;
+          this.alertService.showErrorAlert('please Check the Condition  to Make conditional Question of ' + el.label);
+
+        }
+
+
+
+
       });
+      if (!(checkPageCond < element.field.length)) {
+        this.alertService.showErrorAlert('please Check the Condition  You may  Make All the Question conditional  of page ' + element.name);
+        checkAllCond++;
+      }
 
     });
 
 
-    this.firestore.collection('formList').doc(this.form_Id).update(this.model);
 
+
+    if ((errorCount < 1) && (checkAllCond < 1)) {
+      this.alertService.showSuccessToast('Form Save Successfuly');
+      this.firestore.collection('formList').doc(this.form_Id).update(this.model);
+    }
+
+
+    if ((navigate && (errorCount < 1)) && (checkAllCond < 1)) {
+      $('#assingModel').modal('show');
+
+    }
   }
+
+
+  makeItConditional(item, val) {
+    item.makeItCondsnl = val;
+    if (!val) {
+
+      item.ConditionalQuest = {
+        showIf: true,
+        question: {},
+        answers: {}
+
+      };
+    }
+  }
+
+
   goToForm() {
     $('#assingModel').modal('hide');
 

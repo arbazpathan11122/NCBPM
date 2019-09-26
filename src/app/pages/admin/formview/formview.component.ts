@@ -21,7 +21,8 @@ export class FormViewComponent implements OnInit {
   form: any;
   attriWithOUTCondQues: any;
   attributesWithCondQues: any;
-  conQuestList = [];
+  conditionalQuestionList = [];
+  nonConditionalQuestionList = [];
   formCurrentPage: any;
   currentPageIndex = 0;
   showTable = false;
@@ -73,52 +74,26 @@ export class FormViewComponent implements OnInit {
       this.attriWithOUTCondQues = doc.data();
       this.attributesWithCondQues = doc.data();
 
-      // attriWithOUTCondQues = completForm.attributes.filter(page => {
-      //   return page.field.forEach(el => {
-      //     return el.makeItCondsnl;
-      //   });
-      // });
-      // attributesWithCondQues = completForm.attributes.filter(page => {
-      //   page.field.forEach(el => {
-      //     return !el.makeItCondsnl;
-      //   });
-      // });
-      // this.form = completForm;
 
-      for (let i = 0; i < this.attriWithOUTCondQues.attributes.length; i++) {
+      for (let i = 0; i < completForm.attributes.length; i++) {
 
+        this.attriWithOUTCondQues.attributes[i].field = this.attributesWithCondQues.attributes[i].field.filter(item => !item.makeItCondsnl);
 
-        for (let j = 0; j < this.attriWithOUTCondQues.attributes[i].field.length; j++) {
+        this.attributesWithCondQues.attributes[i].field.forEach(elem => {
+          if (elem.makeItCondsnl) {
+            this.conditionalQuestionList.push(elem);
+          } else {
+            this.nonConditionalQuestionList.push(elem);
 
-
-          if (this.attriWithOUTCondQues.attributes[i].field[j].makeItCondsnl) {
-            this.conQuestList.push(this.attriWithOUTCondQues.attributes[i].field[j]);
-
-            this.attriWithOUTCondQues.attributes[i].field.splice(j, 1);
           }
-        }
+        });
       }
       this.form = this.attriWithOUTCondQues;
-      console.log(this.conQuestList);
-
-      // for (let i = 0; i < this.attributesWithCondQues.attributes.length; i++) {
-
-
-      //   for (let j = 0; j < this.attributesWithCondQues.attributes[i].field.length; j++) {
-
-
-      //     if (!this.attributesWithCondQues.attributes[i].field[j].makeItCondsnl) {
-
-
-      //       this.attributesWithCondQues.attributes[i].field.splice(j, 1);
-      //     }
-      //   }
-      // }
-
-
-
-
       console.log(this.attriWithOUTCondQues);
+
+      console.log('con');
+      console.log(this.conditionalQuestionList);
+
 
       this.formCurrentPage = this.form.attributes[this.currentPageIndex];
       $('.maker-input').css('fontFamily', this.form.theme.fontFamily);
@@ -130,10 +105,25 @@ export class FormViewComponent implements OnInit {
       this.changeAnsColor();
     });
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
   changeQuestColor() {
     const nodes = document.getElementsByClassName('maker-input') as HTMLCollectionOf<HTMLElement>;
+    // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i].getElementsByClassName('name-input') as HTMLCollectionOf<HTMLElement>;
+      // tslint:disable-next-line: prefer-for-of
       for (let j = 0; j < node.length; j++) {
         node[j].style.color = this.form.theme.qestColor;
 
@@ -286,9 +276,9 @@ export class FormViewComponent implements OnInit {
     console.log(item.userResponse);
 
 
-    console.log(this.conQuestList);
+    console.log(this.conditionalQuestionList);
 
-    this.conQuestList.forEach(el => {
+    this.conditionalQuestionList.forEach(el => {
       if (item.id == el.ConditionalQuest.question.id) {
 
 
@@ -303,7 +293,8 @@ export class FormViewComponent implements OnInit {
           if (indexValue !== -1) {
 
 
-            this.formCurrentPage.field.splice(indexValue, 1);
+            // this.formCurrentPage.field.splice(indexValue, 1);
+            this.removeDependentQues1stThenDeleteQuestion(indexValue, el);
           }
         } else {
 
@@ -349,7 +340,8 @@ export class FormViewComponent implements OnInit {
               if (indexValue !== -1) {
 
 
-                this.formCurrentPage.field.splice(indexValue, 1);
+                // this.formCurrentPage.field.splice(indexValue, 1);
+                this.removeDependentQues1stThenDeleteQuestion(indexValue, el);
               }
             }
           }
@@ -386,7 +378,7 @@ export class FormViewComponent implements OnInit {
 
   checkConditionalQuestForTrueFalse(item, index) {
     // inputValue
-    this.conQuestList.forEach(el => {
+    this.conditionalQuestionList.forEach(el => {
       if (item.id == el.ConditionalQuest.question.id) {
 
 
@@ -402,7 +394,8 @@ export class FormViewComponent implements OnInit {
           if (indexValue !== -1) {
 
 
-            this.formCurrentPage.field.splice(indexValue, 1);
+            // this.formCurrentPage.field.splice(indexValue, 1);
+            this.removeDependentQues1stThenDeleteQuestion(indexValue, el);
           }
         }
 
@@ -613,7 +606,7 @@ export class FormViewComponent implements OnInit {
 
   }
 
-  onItemSelect(event, item) {
+  onItemSelect(event, item, index, ) {
     console.log(event);
 
     if (this.isValidObject(item.validOption)) {
@@ -635,13 +628,99 @@ export class FormViewComponent implements OnInit {
       }
 
     }
-
-
-
-    // this.DropDownSettings = Object.assign({}, this.DropDownSettings, { limitSelection: 2 });
-
     console.log(item);
-
+    this.checkConditionalquestForDropDown(event, item, index, true);
   }
 
+
+  checkConditionalquestForDropDown(event, item, index, select) {
+    this.conditionalQuestionList.forEach(el => {
+      if (item.id == el.ConditionalQuest.question.id) {
+        console.log('id match');
+        console.log(event);
+
+        if (el.ConditionalQuest.answers.label === event) {
+          console.log('label match');
+
+          if (select) {
+            this.formCurrentPage.field.splice(index + 1, 0, el);
+            console.log('questio push ');
+
+          } else {
+            console.log('questio remove ');
+            const indexValue = this.formCurrentPage.field.indexOf(el);
+            if (indexValue !== -1) {
+
+
+              // this.formCurrentPage.field.splice(indexValue, 1);
+              this.removeDependentQues1stThenDeleteQuestion(indexValue, el);
+
+            }
+          }
+
+
+        }
+      }
+    });
+  }
+
+
+
+  removeDependentQues1stThenDeleteQuestion(index, el) {
+    const QuestId = el.id;
+    if ((el.fielType === 'picture') || (el.fielType === 'multiple')) {
+      el.userResponse = [];
+      console.log(el);
+      el.values.forEach(val => {
+        val.value = false;
+      });
+      this.formCurrentPage.field.splice(index, 1);
+    } else if ((el.fielType === 'dropdown')) {
+      el.userResponse = [];
+      this.formCurrentPage.field.splice(index, 1);
+
+    } else if ((el.fielType === 'trueFalse') || (el.fielType === 'yesNo')) {
+      el.inputValue = '';
+      this.formCurrentPage.field.splice(index, 1);
+
+    } else if (el.fielType === 'rating') {
+      el.RatingByUser = '';
+      this.formCurrentPage.field.splice(index, 1);
+
+    } else if (el.fielType === 'file') {
+      el.uploadedFileByUser = {
+        name: '',
+        url: '',
+      };
+      this.formCurrentPage.field.splice(index, 1);
+
+    } else {
+      el.value = '';
+      this.formCurrentPage.field.splice(index, 1);
+
+    }
+    const CondQues = this.formCurrentPage.field.filter(elem => elem.makeItCondsnl);
+    console.log(CondQues);
+
+    for (let i = 0; i < CondQues.length; i++) {
+      console.log('its work cond' + i);
+      console.log(QuestId + 'condQuestId ' + CondQues[i].ConditionalQuest.question.id);
+
+      if (CondQues[i].ConditionalQuest.question.id == QuestId) {
+        const indexValue = this.formCurrentPage.field.indexOf(CondQues[i]);
+        console.log('id match');
+
+        if (indexValue !== -1) {
+          console.log('repeat' + 1);
+
+          this.removeDependentQues1stThenDeleteQuestion(indexValue, CondQues[i]);
+
+        }
+      }
+
+
+    }
+  }
 }
+
+

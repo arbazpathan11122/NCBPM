@@ -265,9 +265,8 @@
     <div class="m-4 text-center">
       <br>
       <a *ngIf="currentPageIndex!=0" (click)="navigateToPage(-1)" class="float-left">Prev</a>
-      <button class="btn btn-primary mr-3">Save</button>
-      <button class="btn btn-success mr-3" data-toggle="modal" data-target="#assingModel"
-        (click)="submitbtn()">Submit</button>
+      <button class="btn btn-primary mr-3" (click)="submitbtn()">Save</button>
+      <button class="btn btn-success mr-3" (click)="submitbtn(true)">Save & Assing</button>
       <button class="btn btn-custom" (click)="addPages()">
         <span class="glyphicon glyphicon-plus"></span> &nbsp; Add Page</button>
       <a *ngIf="currentPageIndex!=(model.attributes.length -1)" (click)="navigateToPage(1)" class="float-right">Next</a>
@@ -544,10 +543,10 @@
                                   class="fa fa-toggle-on red"></i>
                               <i *ngIf="!conditionRequired" (click)="conditionRequired = true"
                                   class="fa fa-toggle-off"></i> &nbsp; -->
-              <img class="toggle-imag" *ngIf="selectedItem.makeItCondsnl" (click)="selectedItem.makeItCondsnl = false"
-                src="assets/img/toggle-button-active.png">
-              <img class="toggle-imag" *ngIf="!selectedItem.makeItCondsnl" (click)="selectedItem.makeItCondsnl = true"
-                src="assets/img/toggle-button-inactive.png">
+              <img class="toggle-imag" *ngIf="selectedItem.makeItCondsnl"
+                (click)="makeItConditional(selectedItem ,false) " src="assets/img/toggle-button-active.png">
+              <img class="toggle-imag" *ngIf="!selectedItem.makeItCondsnl"
+                (click)="makeItConditional( selectedItem , true)" src="assets/img/toggle-button-inactive.png">
               <!-- <label class="switch">
                                   <input type="checkbox">
                                   <span class="toogle-slide round"></span>
@@ -561,17 +560,17 @@
               <div *ngIf="selectedItem.makeItCondsnl" class="col-12 pl-3">
                 <div class="nice-select box-nice-select wide mb-1" tabindex="0">
                   <span *ngIf="selectedItem.ConditionalQuest.showIf" class="current">Show If</span>
-                  <span *ngIf="!selectedItem.ConditionalQuest.showIf" class="current">Hide If</span>
+                  <!-- <span *ngIf="!selectedItem.ConditionalQuest.showIf" class="current">Hide If</span> -->
                   <ul class="list">
                     <li (click)="selectedItem.ConditionalQuest.showIf= true" class="option">Show If</li>
-                    <li (click)="selectedItem.ConditionalQuest.showIf= false" class="option">Hide If</li>
+                    <!-- <li (click)="selectedItem.ConditionalQuest.showIf= false" class="option">Hide If</li> -->
                   </ul>
                 </div>
               </div>
               <div *ngIf="selectedItem.makeItCondsnl" class="col-12 pl-3">
                 <label class="nice-lable">Question</label>
                 <div class="nice-select box-nice-select wide mb-1" tabindex="0">
-                  <span (click)="!isValidObject(selectedItem.ConditionalQuest.question)" class="current">Question</span>
+                  <!-- <span (click)="!isValidObject(selectedItem.ConditionalQuest.question)" class="current">Question</span> -->
                   <span (click)="isValidObject(selectedItem.ConditionalQuest.question)"
                     class="current">{{selectedItem.ConditionalQuest.question.label}}</span>
                   <ul class="list">
@@ -584,7 +583,7 @@
               <div *ngIf="selectedItem.makeItCondsnl" class="col-12 pl-3">
                 <label class="nice-lable">Answer</label>
                 <div class="nice-select box-nice-select wide mb-1" tabindex="0">
-                  <span (click)="!isValidObject(selectedItem.ConditionalQuest.answers)" class="current">Answer</span>
+                  <!-- <span (click)="!isValidObject(selectedItem.ConditionalQuest.answers)" class="current">Answer</span> -->
                   <span (click)="isValidObject(selectedItem.ConditionalQuest.answers)"
                     class="current">{{selectedItem.ConditionalQuest.answers.label}}</span>
                   <ul class="list">
