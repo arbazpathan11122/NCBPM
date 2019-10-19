@@ -34,18 +34,18 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
   signInSuccessUrl: 'https://ncbpm-1.firebaseapp.com/login',
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    // {
-    //   scopes: [
-    //     'public_profile',
-    //     'email',
-    //     'user_likes',
-    //     'user_friends'
-    //   ],
-    //   customParameters: {
-    //     'auth_type': 'reauthenticate'
-    //   },
-    //   provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID
-    // },
+    {
+      scopes: [
+        'public_profile',
+        'email',
+        'user_likes',
+        'user_friends'
+      ],
+      customParameters: {
+        'auth_type': 'reauthenticate'
+      },
+      provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID
+    },
     // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
     // firebase.auth.GithubAuthProvider.PROVIDER_ID,
     {

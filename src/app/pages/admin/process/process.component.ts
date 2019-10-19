@@ -82,6 +82,8 @@ export class ProcessComponent implements OnInit {
 
 
   getFormFromFirebase() {
+    this.alertService.showLoader('Loading....');
+
     this.firestore.collection('formList').get().subscribe(doc => {
       doc.forEach((elem) => {
         const id = elem.id;
